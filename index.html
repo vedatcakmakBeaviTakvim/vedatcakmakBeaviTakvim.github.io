@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beavi — Beyanname ve Prim Takvim Asistanı</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0a0f1e; color: #e8eaf0; }
+
+  header {
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a2a5e 100%);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #FFD700;
+  }
+
+  .logo-area { display: flex; align-items: center; gap: 16px; }
+
+  .logo-svg { width: 56px; height: 56px; }
+
+  .brand-name { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+  .brand-sub { font-size: 12px; color: #FFD700; letter-spacing: 2px; text-transform: uppercase; }
+
+  .hero {
+    text-align: center;
+    padding: 80px 40px 60px;
+    background: linear-gradient(180deg, #0d1b3e 0%, #0a0f1e 100%);
+  }
+
+  .hero h1 { font-size: 42px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+  .hero h1 span { color: #FFD700; }
+  .hero p { font-size: 18px; color: #aab0c8; max-width: 600px; margin: 0 auto 40px; line-height: 1.7; }
+
+  .cta-btn {
+    display: inline-block;
+    background: #25D366;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 40px;
+  }
+
+  .feature-card {
+    background: #1a2a5e;
+    border: 1px solid #2a3a7e;
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-4px); }
+
+  .feature-icon { font-size: 40px; margin-bottom: 16px; }
+  .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #FFD700; }
+  .feature-card p { font-size: 14px; color: #8890b0; line-height: 1.6; }
+
+  .highlight {
+    background: #1a2a5e;
+    border-left: 4px solid #FFD700;
+    border-radius: 12px;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 32px 40px;
+    text-align: center;
+  }
+  .highlight h2 { font-size: 26px; margin-bottom: 12px; }
+  .highlight p { color: #aab0c8; font-size: 16px; line-height: 1.7; }
+
+  .free-badge {
+    display: inline-block;
+    background: #FFD700;
+    color: #0a0f1e;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 60px 40px;
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a2a5e 100%);
+  }
+  .cta-section h2 { font-size: 32px; margin-bottom: 12px; }
+  .cta-section p { color: #aab0c8; margin-bottom: 32px; font-size: 16px; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid #1a2a5e;
+    color: #555e80;
+    font-size: 13px;
+  }
+  footer span { color: #FFD700; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 28px; }
+    header { padding: 16px 20px; }
+    .features { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <svg class="logo-svg" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="27" fill="#0d1b3e" stroke="#FFD700" stroke-width="2"/>
+      <line x1="18" y1="28" x2="18" y2="14" stroke="white" stroke-width="5" stroke-linecap="round"/>
+      <path d="M18 14 Q18 8 24 8 Q30 8 30 14 Q30 20 24 20 Q18 20 18 20" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+      <path d="M18 28 Q18 22 24 22 Q31 22 31 28 Q31 35 24 35 Q18 35 18 35" fill="none" stroke="#FFD700" stroke-width="4" stroke-linecap="round"/>
+      <line x1="33" y1="40" x2="44" y2="40" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="brand-name">Beavi</div>
+      <div class="brand-sub">by VedatBot</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="free-badge">🎁 ŞU AN ÜCRETSİZ</div>
+  <h1>Mali Takvimi Asla<br><span>Kaçırmayın</span></h1>
+  <p>KDV, Muhtasar, SGK, Bağ-Kur, Gelir Vergisi — tüm beyanname ve prim ödeme tarihlerini otomatik takip edin. Son gün gelince sesli alarm çalar, uzatmalar otomatik güncellenir.</p>
+  <a class="cta-btn" href="https://wa.me/905335733697?text=Merhaba%2C%20Beavi%20Takvim%20program%C4%B1n%C4%B1%20edinmek%20istiyorum." target="_blank">
+    📲 WhatsApp ile Ücretsiz Al
+  </a>
+</section>
+
+<div class="features">
+  <div class="feature-card">
+    <div class="feature-icon">🔔</div>
+    <h3>Sesli Alarm</h3>
+    <p>Son gün gelince ekranınız yanıp söner, sesli uyarı verir. Hiçbir beyannameyi kaçırmayın.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📅</div>
+    <h3>Tam GİB Takvimi</h3>
+    <p>KDV, Muhtasar, SGK, Bağ-Kur, Geçici Vergi, Kurumlar Vergisi ve daha fazlası.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">⚡</div>
+    <h3>Uzatma Takibi</h3>
+    <p>SGK sistemi çöktü mü? Tarihler uzatıldı mı? Beavi otomatik günceller, sizi uyarır.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">💻</div>
+    <h3>İnternetsiz Çalışır</h3>
+    <p>Tamamen yerel çalışır. İnternet olmasa da alarmlarınız çalışmaya devam eder.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🎯</div>
+    <h3>Kişiselleştirin</h3>
+    <p>Sadece sizinle ilgili kategorileri seçin. ÖTV, BSMV, e-Defter, Turizm Payı ve daha fazlası.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🛡️</div>
+    <h3>Güvenli</h3>
+    <p>Müşteri verileriniz sadece sizin bilgisayarınızda. Hiçbir sunucuya gönderilmez.</p>
+  </div>
+</div>
+
+<div style="padding: 0 40px;">
+  <div class="highlight">
+    <h2>SMMM'ler için tasarlandı</h2>
+    <p>Mali müşavirlik büronuzdaki tüm beyanname takibini tek ekranda görün. Acil tarihler kırmızıyla öne çıkar, uzak tarihler arka planda bekler.</p>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Hemen Başlayın</h2>
+  <p>Şu an ücretsiz. WhatsApp'tan yazın, kurulum dosyasını anında göndereceğiz.</p>
+  <a class="cta-btn" href="https://wa.me/905335733697?text=Merhaba%2C%20Beavi%20Takvim%20program%C4%B1n%C4%B1%20edinmek%20istiyorum." target="_blank">
+    📲 Şimdi İndir — Ücretsiz
+  </a>
+</section>
+
+<footer>
+  <p>© 2026 <span>Beavi</span> — Powered by <span>VedatBot</span></p>
+</footer>
+
+</body>
+</html>
