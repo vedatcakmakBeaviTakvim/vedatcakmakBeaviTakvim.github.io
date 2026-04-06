@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Beavi">
+<meta name="theme-color" content="#0d1b2a">
+<title>Beavi – Beyanname Takvimi</title>
+<style>
+:root{
+  --bg:#0d1b2a;--bg2:#0f2133;--kart:#112640;--brd:#1e3a5f;
+  --t1:#e8f0fe;--t2:#7a9cc4;--t3:#4a7099;
+  --acbg:#1c0f00;--acbar:#ff6b00;--actxt:#ff8c00;
+  --ykbg:#0d1e0d;--ykbar:#22c55e;--yktxt:#4ade80;
+  --mavi:#3b82f6;--ysl:#22c55e;--kir:#ef4444;
+  --sari:#f5c518;--r:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--t1);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100dvh;
+  padding-bottom:max(calc(env(safe-area-inset-bottom) + 72px),80px);
+  overflow-x:hidden;}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:99;background:var(--bg2);
+  border-bottom:2px solid var(--brd);
+  padding:12px 14px;
+  padding-top:max(env(safe-area-inset-top),12px);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.lw{display:flex;align-items:center;gap:10px;}
+.lb{width:44px;height:44px;flex-shrink:0;}
+.lt h1{font-size:18px;font-weight:700;color:var(--t1);line-height:1.25;border-bottom:2px solid #f49e0b;padding-bottom:2px;display:inline-block;}
+.lt small{font-size:10px;font-weight:500;color:var(--t2);letter-spacing:0.5px;display:block;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 12px 0;}
+.stat{background:var(--kart);border:1px solid var(--brd);border-radius:var(--r);
+  padding:13px 8px 11px;text-align:center;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sa::before{background:var(--kir);}.sb::before{background:var(--mavi);}.ss::before{background:var(--ysl);}
+.sn{font-size:28px;font-weight:800;line-height:1;margin-bottom:4px;min-height:34px;display:flex;align-items:center;justify-content:center;}
+.sa .sn{color:var(--kir);}.sb .sn{color:var(--mavi);}
+.ss .sn{color:var(--ysl);font-size:12px;line-height:1.2;word-break:break-word;}
+.sl{font-size:8.5px;font-weight:600;letter-spacing:1.4px;color:var(--t3);text-transform:uppercase;}
+
+/* BANNER */
+.bnr{display:none;margin:10px 12px 0;background:var(--acbg);border:1px solid var(--acbar);
+  border-radius:var(--r);padding:10px 12px;align-items:center;gap:10px;}
+.bnr.show{display:flex;}
+.bt{flex:1;font-size:12px;color:var(--actxt);font-weight:600;line-height:1.4;}
+.bx{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1;}
+
+/* LIST */
+.shdr{display:flex;align-items:center;justify-content:space-between;padding:16px 12px 8px;}
+.stitle{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
+.rbtn{background:transparent;border:1px solid var(--brd);border-radius:18px;color:var(--t2);
+  font-size:11px;font-family:inherit;padding:5px 13px;cursor:pointer;}
+.liste{padding:0 12px 10px;display:flex;flex-direction:column;gap:7px;}
+
+/* CARDS */
+.k0{background:#1a0000;border:1.5px solid #ef4444;border-radius:var(--r);padding:12px 14px;text-align:center;}
+.k0 .badge{font-size:10px;font-weight:800;color:#ef4444;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.k0 .ad{font-size:14px;font-weight:700;color:#fca5a5;margin-bottom:2px;}
+.k0 .nt{font-size:9px;color:#b45151;font-style:italic;}
+
+.k1{background:var(--acbg);border-left:4px solid var(--acbar);
+  border-top:1px solid #2a1500;border-right:1px solid #2a1500;border-bottom:1px solid #2a1500;
+  border-radius:var(--r);padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.k1 .badge{font-size:9px;font-weight:700;color:var(--actxt);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:3px;}
+.k1 .ad{font-size:13px;font-weight:700;color:#ffe0b2;margin-bottom:2px;}
+.k1 .tr{font-size:10px;color:#b36000;}.k1 .nt{font-size:9px;color:#8a4e00;margin-top:2px;font-style:italic;}
+.k1 .num{font-size:32px;font-weight:900;color:var(--acbar);line-height:1;}
+.k1 .lbl{font-size:8px;font-weight:700;color:var(--actxt);letter-spacing:1px;text-transform:uppercase;}
+.k1 .sayac{text-align:center;flex-shrink:0;}
+
+.k2{background:var(--ykbg);border-left:3px solid var(--ykbar);
+  border-top:1px solid #0a2e0a;border-right:1px solid #0a2e0a;border-bottom:1px solid #0a2e0a;
+  border-radius:var(--r);padding:10px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.k2 .badge{font-size:9px;font-weight:700;color:var(--yktxt);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:3px;}
+.k2 .ad{font-size:12px;font-weight:700;color:#d1fae5;margin-bottom:2px;}
+.k2 .tr{font-size:10px;color:#166534;}.k2 .nt{font-size:9px;color:#0f5132;margin-top:2px;font-style:italic;}
+.k2 .num{font-size:26px;font-weight:800;color:var(--yktxt);line-height:1;}
+.k2 .lbl{font-size:8px;color:var(--yktxt);letter-spacing:1px;text-transform:uppercase;}
+.k2 .sayac{text-align:center;flex-shrink:0;}
+
+.k3{background:var(--kart);border:1px solid var(--brd);border-left:4px solid var(--brd);
+  border-radius:var(--r);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.k3 .ad{font-size:12px;font-weight:600;color:var(--t1);margin-bottom:2px;}
+.k3 .tr{font-size:10px;color:var(--t3);}.k3 .nt{font-size:9px;color:var(--t3);margin-top:2px;font-style:italic;opacity:.75;}
+.k3 .num{font-size:20px;font-weight:700;color:var(--t2);}
+.k3 .lbl{font-size:8px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;}
+.k3 .sayac{text-align:center;flex-shrink:0;}
+
+.bos{text-align:center;padding:40px 16px;color:var(--t3);font-size:13px;}
+
+/* BOTTOM NAV — parmak erişimi için aşağıda */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg2);
+  border-top:1px solid var(--brd);
+  display:flex;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  z-index:100;
+}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;background:transparent;border:none;color:var(--t2);
+  font-size:9px;font-family:inherit;letter-spacing:.5px;
+  padding:10px 4px;cursor:pointer;
+  transition:color .15s;
+}
+.nb:active{color:var(--t1);}
+.nb.aon{color:var(--actxt);}
+.nb .ico{font-size:20px;line-height:1;}
+
+/* PWA PROMPT */
+.pwa{display:none;position:fixed;bottom:72px;left:12px;right:12px;
+  background:var(--bg2);border:1px solid var(--sari);border-radius:14px;
+  padding:14px 16px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.6);}
+.pwa.show{display:block;}
+.pwa h3{font-size:13px;font-weight:700;color:var(--sari);margin-bottom:4px;}
+.pwa p{font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.5;}
+.pwa-row{display:flex;gap:8px;}
+.pwa-yes{flex:1;background:var(--sari);color:#000;border:none;border-radius:8px;
+  padding:11px;font-size:12px;font-weight:700;cursor:pointer;}
+.pwa-no{background:transparent;color:var(--t3);border:1px solid var(--brd);
+  border-radius:8px;padding:11px 14px;font-size:12px;cursor:pointer;}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.blink{animation:blink 1s ease-in-out infinite;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="lw">
+    <!-- Logo: beavi_logo_final_800.html'den SVG versiyonu -->
+    <svg class="lb" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="44" rx="10" fill="#0d1b2a"/>
+      <rect width="44" height="22" rx="10" fill="#f49e0b"/>
+      <rect y="22" width="44" height="22" rx="0" fill="#0d1b2a"/>
+      <rect y="15" width="44" height="14" fill="#f49e0b" opacity="0.15"/>
+      <text x="22" y="30" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22" font-weight="900" fill="white">B</text>
+    </svg>
+    <div class="lt">
+      <h1>Beavi</h1>
+      <small>Beyanname Takvimi 2026</small>
+    </div>
+  </div>
+  <div style="font-size:10px;color:var(--t3);text-align:right;" id="tarihEl"></div>
+</header>
+
+<div class="stats">
+  <div class="stat sa"><div class="sn" id="sA">-</div><div class="sl">ACİL</div></div>
+  <div class="stat sb"><div class="sn" id="sB">-</div><div class="sl">BU AY</div></div>
+  <div class="stat ss"><div class="sn" id="sS" style="font-size:12px">-</div><div class="sl">SONRAKİ</div></div>
+</div>
+
+<div class="bnr" id="bnr">
+  <span style="font-size:20px">🚨</span>
+  <span class="bt" id="bnrTxt">Acil beyanname var!</span>
+  <button class="bx" onclick="document.getElementById('bnr').className='bnr'">✕</button>
+</div>
+
+<div class="shdr">
+  <span class="stitle">BEYANNAME TAKVİMİ</span>
+  <button class="rbtn" onclick="render()">✦ Yenile</button>
+</div>
+<div class="liste" id="liste"></div>
+
+<!-- PWA Install -->
+<div class="pwa" id="pwaEl">
+  <h3>📲 Ana Ekrana Ekle</h3>
+  <p>Beavi'yi ana ekranınıza ekleyin — kurulum yok, ücretsiz, uygulama gibi çalışır.</p>
+  <div class="pwa-row">
+    <button class="pwa-yes" onclick="pwaKur()">Ana Ekrana Ekle</button>
+    <button class="pwa-no" onclick="pwaRed()">Sonra</button>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bnav">
+  <button class="nb" id="alarmBtn" onclick="alarmToggle()">
+    <span class="ico">🔔</span>
+    <span id="alarmLbl">Alarm</span>
+  </button>
+  <button class="nb" onclick="filtrePanelAc()">
+    <span class="ico">🔽</span>
+    <span>Filtre</span>
+  </button>
+  <button class="nb" onclick="bilgiGoster()">
+    <span class="ico">ℹ️</span>
+    <span>Hakkında</span>
+  </button>
+</nav>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+// TAM 2026 VERGİ TAKVİMİ — GİB RESMİ VERİLERİ
+// ════════════════════════════════════════════════════════════════════
+var CACHE = [
+// OCAK
+{"tarih":"2026-01-16","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Aralık 2025)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-01-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Aralık 2025)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-01-15","tur":"Özel İletişim Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-15","tur":"Ticaret Sicili Harçları (Aralık 2025)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-01-15","tur":"KKDF Kesintisi Bildirimi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-20","tur":"İlan ve Reklam Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-20","tur":"Eğlence Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-20","tur":"Yangın Sigortası Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-20","tur":"Şans Oyunları Vergisi (Aralık 2025)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-01-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Aralık 2025)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-01-26","tur":"Muhtasar - Üçer Aylık (Eki-Kas-Ara 2025)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-01-26","tur":"Damga Vergisi (Aralık 2025)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-01-26","tur":"Konaklama Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-01-28","tur":"KDV-1 Beyannamesi (Aralık 2025)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-01-28","tur":"KDV - Üçer Aylık (Eki-Kas-Ara 2025)","kaynak":"GIB","grup":"kdv"},
+// ŞUBAT
+{"tarih":"2026-02-02","tur":"Motorlu Taşıtlar Vergisi 1. Taksit","kaynak":"GIB","grup":"mtv"},
+{"tarih":"2026-02-02","tur":"Haberleşme Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-02","tur":"Dijital Hizmet Vergisi (Aralık 2025)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-16","tur":"Banka ve Sigorta Muameleleri Vergisi (Ocak 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-02-16","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Ocak 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-02-16","tur":"Özel İletişim Vergisi (Ocak 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-16","tur":"Ticaret Sicili Harçları (Ocak 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-02-17","tur":"Geçici Vergi (2025 IV. Dönem Ekim-Kasım-Aralık)","kaynak":"GIB","grup":"gecici"},
+{"tarih":"2026-02-20","tur":"Şans Oyunları Vergisi (Ocak 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-02-20","tur":"İlan ve Reklam Vergisi (Ocak 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-20","tur":"Eğlence Vergisi (Ocak 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Ocak 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-20","tur":"Yangın Sigortası Vergisi (Ocak 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-02-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Ocak 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-02-26","tur":"Damga Vergisi (Ocak 2026)","kaynak":"GIB","grup":"damga"},
+// MART
+{"tarih":"2026-03-02","tur":"KDV-1 Beyannamesi (Ocak 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-03-16","tur":"Banka ve Sigorta Muameleleri Vergisi (Şubat 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-03-16","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Şubat 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-03-16","tur":"Özel İletişim Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-16","tur":"Ticaret Sicili Harçları (Şubat 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-03-23","tur":"Elektrik ve Havagazı Tüketim Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-23","tur":"Yangın Sigortası Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-23","tur":"Şans Oyunları Vergisi (Şubat 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-03-23","tur":"İlan ve Reklam Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-23","tur":"Eğlence Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Şubat 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-03-26","tur":"Damga Vergisi (Şubat 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-03-30","tur":"KDV-1 Beyannamesi (Şubat 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-03-31","tur":"2025 Yıllık Gelir Vergisi Beyannamesi ve 1. Taksit","kaynak":"GIB","grup":"gelir"},
+{"tarih":"2026-03-31","tur":"Haberleşme Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-03-31","tur":"Dijital Hizmet Vergisi (Şubat 2026)","kaynak":"GIB","grup":"diger"},
+// NİSAN
+{"tarih":"2026-04-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Mart 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-04-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Mart 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-04-15","tur":"Özel İletişim Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-15","tur":"Ticaret Sicili Harçları (Mart 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-04-15","tur":"KKDF Kesintisi Bildirimi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-20","tur":"Şans Oyunları Vergisi (Mart 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-04-20","tur":"İlan ve Reklam Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-20","tur":"Eğlence Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-20","tur":"Yangın Sigortası Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-27","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Mart 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-04-27","tur":"Muhtasar - Üçer Aylık (Oca-Şub-Mar 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-04-27","tur":"Damga Vergisi (Mart 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-04-27","tur":"Konaklama Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-28","tur":"KDV-1 Beyannamesi (Mart 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-04-28","tur":"KDV - Üçer Aylık (Oca-Şub-Mar 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-04-30","tur":"2025 Kurumlar Vergisi Beyannamesi","kaynak":"GIB","grup":"kurumlar"},
+{"tarih":"2026-04-30","tur":"Haberleşme Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-04-30","tur":"Dijital Hizmet Vergisi (Mart 2026)","kaynak":"GIB","grup":"diger"},
+// MAYIS
+{"tarih":"2026-05-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Nisan 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-05-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Nisan 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-05-15","tur":"Özel İletişim Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-05-15","tur":"Ticaret Sicili Harçları (Nisan 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-05-18","tur":"2026 I. Geçici Vergi Dönemi (Oca-Şub-Mar)","kaynak":"GIB","grup":"gecici"},
+{"tarih":"2026-05-20","tur":"Şans Oyunları Vergisi (Nisan 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-05-20","tur":"İlan ve Reklam Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-05-20","tur":"Eğlence Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-05-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-05-20","tur":"Yangın Sigortası Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-05-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Nisan 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-05-26","tur":"Damga Vergisi (Nisan 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-05-26","tur":"Konaklama Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+// HAZİRAN
+{"tarih":"2026-06-01","tur":"KDV-1 Beyannamesi (Nisan 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-06-01","tur":"Haberleşme Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-01","tur":"Dijital Hizmet Vergisi (Nisan 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-01","tur":"Emlak Vergisi 1. Taksit","kaynak":"GIB","grup":"emlak"},
+{"tarih":"2026-06-01","tur":"Çevre Temizlik Vergisi 1. Taksit","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-01","tur":"Veraset ve İntikal Vergisi 1. Taksit","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Mayıs 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-06-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-06-15","tur":"Özel İletişim Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-15","tur":"Ticaret Sicili Harçları (Mayıs 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-06-22","tur":"Şans Oyunları Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-06-22","tur":"İlan ve Reklam Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-22","tur":"Eğlence Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-22","tur":"Elektrik ve Havagazı Tüketim Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-22","tur":"Yangın Sigortası Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Mayıs 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-06-26","tur":"Damga Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-06-26","tur":"Konaklama Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-29","tur":"KDV-1 Beyannamesi (Mayıs 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-06-30","tur":"Haberleşme Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-06-30","tur":"Dijital Hizmet Vergisi (Mayıs 2026)","kaynak":"GIB","grup":"diger"},
+// TEMMUZ (Mali Tatil 1-20 Temmuz)
+{"tarih":"2026-07-16","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Haziran 2026)","kaynak":"GIB","grup":"otv","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-16","tur":"Banka ve Sigorta Muameleleri Vergisi (Haziran 2026)","kaynak":"GIB","grup":"bsmv","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-16","tur":"Özel İletişim Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-16","tur":"Ticaret Sicili Harçları (Haziran 2026)","kaynak":"GIB","grup":"harc","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-20","tur":"Şans Oyunları Vergisi (Haziran 2026)","kaynak":"GIB","grup":"sans","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-20","tur":"İlan ve Reklam Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-20","tur":"Eğlence Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-20","tur":"Yangın Sigortası Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-27","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Haziran 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-07-27","tur":"Muhtasar - Üçer Aylık (Nis-May-Haz 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-07-27","tur":"Damga Vergisi (Haziran 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-07-27","tur":"Konaklama Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-07-28","tur":"KDV-1 Beyannamesi (Haziran 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-07-28","tur":"KDV - Üçer Aylık (Nis-May-Haz 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-07-31","tur":"2025 Yıllık Gelir Vergisi 2. Taksit","kaynak":"GIB","grup":"gelir"},
+{"tarih":"2026-07-31","tur":"Motorlu Taşıtlar Vergisi 2. Taksit","kaynak":"GIB","grup":"mtv"},
+{"tarih":"2026-07-31","tur":"Haberleşme Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-07-31","tur":"Dijital Hizmet Vergisi (Haziran 2026)","kaynak":"GIB","grup":"diger"},
+// AĞUSTOS
+{"tarih":"2026-08-17","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Temmuz 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-08-17","tur":"Banka ve Sigorta Muameleleri Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-08-17","tur":"Özel İletişim Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-17","tur":"Ticaret Sicili Harçları (Temmuz 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-08-17","tur":"2026 II. Geçici Vergi Dönemi (Nis-May-Haz)","kaynak":"GIB","grup":"gecici"},
+{"tarih":"2026-08-20","tur":"Şans Oyunları Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-08-20","tur":"İlan ve Reklam Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-20","tur":"Yangın Sigortası Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Temmuz 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-08-26","tur":"Damga Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-08-26","tur":"Konaklama Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-28","tur":"KDV-1 Beyannamesi (Temmuz 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-08-31","tur":"Dijital Hizmet Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-08-31","tur":"Haberleşme Vergisi (Temmuz 2026)","kaynak":"GIB","grup":"diger"},
+// EYLÜL
+{"tarih":"2026-09-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Ağustos 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-09-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-09-15","tur":"Özel İletişim Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-15","tur":"Ticaret Sicili Harçları (Ağustos 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-09-21","tur":"Şans Oyunları Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-09-21","tur":"İlan ve Reklam Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-21","tur":"Elektrik ve Havagazı Tüketim Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-21","tur":"Yangın Sigortası Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-28","tur":"KDV-1 Beyannamesi (Ağustos 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-09-28","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Ağustos 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-09-28","tur":"Damga Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-09-28","tur":"Konaklama Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-30","tur":"Dijital Hizmet Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-09-30","tur":"Haberleşme Vergisi (Ağustos 2026)","kaynak":"GIB","grup":"diger"},
+// EKİM
+{"tarih":"2026-10-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Eylül 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-10-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Eylül 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-10-15","tur":"Özel İletişim Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-10-15","tur":"Ticaret Sicili Harçları (Eylül 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-10-20","tur":"Şans Oyunları Vergisi (Eylül 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-10-20","tur":"İlan ve Reklam Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-10-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-10-20","tur":"Yangın Sigortası Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-10-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Eylül 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-10-26","tur":"Muhtasar - Üçer Aylık (Tem-Ağu-Eyl 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-10-26","tur":"Damga Vergisi (Eylül 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-10-26","tur":"Konaklama Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-10-28","tur":"KDV-1 Beyannamesi (Eylül 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-10-28","tur":"KDV - Üçer Aylık (Tem-Ağu-Eyl 2026)","kaynak":"GIB","grup":"kdv"},
+// KASIM
+{"tarih":"2026-11-02","tur":"Haberleşme Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-02","tur":"Dijital Hizmet Vergisi (Eylül 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-16","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Ekim 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-11-16","tur":"Banka ve Sigorta Muameleleri Vergisi (Ekim 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-11-16","tur":"Özel İletişim Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-16","tur":"Ticaret Sicili Harçları (Ekim 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-11-17","tur":"2026 III. Geçici Vergi Dönemi (Tem-Ağu-Eyl)","kaynak":"GIB","grup":"gecici"},
+{"tarih":"2026-11-20","tur":"Şans Oyunları Vergisi (Ekim 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-11-20","tur":"İlan ve Reklam Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-20","tur":"Elektrik ve Havagazı Tüketim Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-20","tur":"Yangın Sigortası Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-26","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Ekim 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-11-26","tur":"Damga Vergisi (Ekim 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-11-26","tur":"Konaklama Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-30","tur":"KDV-1 Beyannamesi (Ekim 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-11-30","tur":"Emlak Vergisi 2. Taksit","kaynak":"GIB","grup":"emlak"},
+{"tarih":"2026-11-30","tur":"Çevre Temizlik Vergisi 2. Taksit","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-30","tur":"Veraset ve İntikal Vergisi 2. Taksit","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-30","tur":"Haberleşme Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-11-30","tur":"Dijital Hizmet Vergisi (Ekim 2026)","kaynak":"GIB","grup":"diger"},
+// ARALIK
+{"tarih":"2026-12-15","tur":"OTV - Alkollü İçecekler, Tütün, Dayanıklı Tüketim (Kasım 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-12-15","tur":"Banka ve Sigorta Muameleleri Vergisi (Kasım 2026)","kaynak":"GIB","grup":"bsmv"},
+{"tarih":"2026-12-15","tur":"Özel İletişim Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-15","tur":"Ticaret Sicili Harçları (Kasım 2026)","kaynak":"GIB","grup":"harc"},
+{"tarih":"2026-12-21","tur":"Şans Oyunları Vergisi (Kasım 2026)","kaynak":"GIB","grup":"sans"},
+{"tarih":"2026-12-21","tur":"İlan ve Reklam Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-21","tur":"Elektrik ve Havagazı Tüketim Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-21","tur":"Yangın Sigortası Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-28","tur":"KDV-1 Beyannamesi (Kasım 2026)","kaynak":"GIB","grup":"kdv"},
+{"tarih":"2026-12-28","tur":"Muhtasar ve Prim Hizmet Beyannamesi (Kasım 2026)","kaynak":"GIB","grup":"muhtasar"},
+{"tarih":"2026-12-28","tur":"Damga Vergisi (Kasım 2026)","kaynak":"GIB","grup":"damga"},
+{"tarih":"2026-12-28","tur":"Konaklama Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-31","tur":"Haberleşme Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-31","tur":"Dijital Hizmet Vergisi (Kasım 2026)","kaynak":"GIB","grup":"diger"},
+{"tarih":"2026-12-31","tur":"Yerel Asgari Tamamlayıcı Kurumlar Vergisi (2025)","kaynak":"GIB","grup":"kurumlar"}
+];
+
+// SGK (2026 — tüm yıl)
+var SGK_DATA = [
+  {"tarih":"2026-04-07","tur":"SGK Primi 4/a (Şubat 2026)","kaynak":"SGK","uzatma_notu":"Devlet uzatması: 31 Mar → 07 Nis 2026"},
+  {"tarih":"2026-04-07","tur":"Bağ-Kur Primi 4/b (Şubat 2026)","kaynak":"SGK","uzatma_notu":"Devlet uzatması: 31 Mar → 07 Nis 2026"},
+  {"tarih":"2026-04-30","tur":"SGK Primi 4/a (Mart 2026)","kaynak":"SGK"},
+  {"tarih":"2026-04-30","tur":"Bağ-Kur Primi 4/b (Mart 2026)","kaynak":"SGK"},
+  {"tarih":"2026-05-31","tur":"SGK Primi 4/a (Nisan 2026)","kaynak":"SGK"},
+  {"tarih":"2026-05-31","tur":"Bağ-Kur Primi 4/b (Nisan 2026)","kaynak":"SGK"},
+  {"tarih":"2026-06-30","tur":"SGK Primi 4/a (Mayıs 2026)","kaynak":"SGK"},
+  {"tarih":"2026-06-30","tur":"Bağ-Kur Primi 4/b (Mayıs 2026)","kaynak":"SGK"},
+  {"tarih":"2026-07-31","tur":"SGK Primi 4/a (Haziran 2026)","kaynak":"SGK"},
+  {"tarih":"2026-07-31","tur":"Bağ-Kur Primi 4/b (Haziran 2026)","kaynak":"SGK"},
+  {"tarih":"2026-08-31","tur":"SGK Primi 4/a (Temmuz 2026)","kaynak":"SGK"},
+  {"tarih":"2026-08-31","tur":"Bağ-Kur Primi 4/b (Temmuz 2026)","kaynak":"SGK"},
+  {"tarih":"2026-09-30","tur":"SGK Primi 4/a (Ağustos 2026)","kaynak":"SGK"},
+  {"tarih":"2026-09-30","tur":"Bağ-Kur Primi 4/b (Ağustos 2026)","kaynak":"SGK"},
+  {"tarih":"2026-10-30","tur":"SGK Primi 4/a (Eylül 2026)","kaynak":"SGK"},
+  {"tarih":"2026-10-30","tur":"Bağ-Kur Primi 4/b (Eylül 2026)","kaynak":"SGK"},
+  {"tarih":"2026-11-30","tur":"SGK Primi 4/a (Ekim 2026)","kaynak":"SGK"},
+  {"tarih":"2026-11-30","tur":"Bağ-Kur Primi 4/b (Ekim 2026)","kaynak":"SGK"},
+  {"tarih":"2026-12-31","tur":"SGK Primi 4/a (Kasım 2026)","kaynak":"SGK"},
+  {"tarih":"2026-12-31","tur":"Bağ-Kur Primi 4/b (Kasım 2026)","kaynak":"SGK"}
+];
+
+// Tüm veri birleşimi
+var TUMVERI = CACHE.concat(SGK_DATA);
+
+var AYLAR = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+var GUNLER = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+
+// Aktif filtreler
+var AKTIF_GRUPLAR = null; // null = hepsi
+
+function parseD(s){var p=s.split('-');return new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));}
+function dStr(d){return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();}
+function bugun(){var d=new Date();d.setHours(0,0,0,0);return d;}
+function kalanGun(d){return Math.round((d-bugun())/86400000);}
+function fmtT(d){return d.getDate()+' '+AYLAR[d.getMonth()]+' ('+GUNLER[d.getDay()]+')';}
+
+function getListe(){
+  var bg=bugun();
+  var sonuc=[];
+  for(var i=0;i<TUMVERI.length;i++){
+    try{
+      var g=TUMVERI[i];
+      if(AKTIF_GRUPLAR && g.grup && AKTIF_GRUPLAR.indexOf(g.grup)===-1) continue;
+      var t=parseD(g.tarih);
+      var k=kalanGun(t);
+      if(k>=0 && k<=180){
+        sonuc.push({tur:g.tur,gun:t,kalan:k,neden:g.uzatma_notu||null,kaynak:g.kaynak||'GIB'});
+      }
+    }catch(e){}
+  }
+  sonuc.sort(function(a,b){return a.gun-b.gun;});
+  return sonuc;
+}
+
+var alarmAcik=false;
+function alarmToggle(){
+  alarmAcik=!alarmAcik;
+  var btn=document.getElementById('alarmBtn');
+  var lbl=document.getElementById('alarmLbl');
+  if(alarmAcik){btn.classList.add('aon');lbl.textContent='Alarm ✓';bipSesi();}
+  else{btn.classList.remove('aon');lbl.textContent='Alarm';}
+}
+
+function render(){
+  var now=new Date();
+  var g=GUNLER[now.getDay()];
+  document.getElementById('tarihEl').innerHTML=g+'<br>'+now.toLocaleDateString('tr-TR');
+
+  var lst=getListe();
+  var bg=bugun();
+  var acil=0,buAy=0;
+  for(var i=0;i<lst.length;i++){
+    if(lst[i].kalan<=3) acil++;
+    if(lst[i].gun.getMonth()===bg.getMonth()&&lst[i].gun.getFullYear()===bg.getFullYear()) buAy++;
+  }
+  document.getElementById('sA').textContent=acil;
+  document.getElementById('sB').textContent=buAy;
+  var sS=document.getElementById('sS');
+  if(lst.length>0){sS.textContent=lst[0].kalan===0?'Bugün!':fmtT(lst[0].gun);}
+  else{sS.textContent='-';}
+
+  var sAEl=document.getElementById('sA');
+  if(acil>0){
+    sAEl.className='sn blink';
+    document.getElementById('bnrTxt').textContent=acil+' acil beyanname var! Son 3 gün.';
+    document.getElementById('bnr').className='bnr show';
+    if(alarmAcik) bipSesi();
+  }else{sAEl.className='sn';document.getElementById('bnr').className='bnr';}
+
+  var el=document.getElementById('liste');
+  el.innerHTML='';
+  if(lst.length===0){el.innerHTML='<div class="bos">Önümüzdeki 180 günde beyanname yok.</div>';return;}
+
+  for(var j=0;j<lst.length;j++){
+    var b=lst[j];
+    var div=document.createElement('div');
+    var tStr='Son gün: '+fmtT(b.gun);
+    var kayBadge=b.kaynak==='SGK'?'<span style="font-size:9px;background:#1e3a5f;color:#7a9cc4;border-radius:4px;padding:1px 5px;margin-left:5px">SGK</span>':'';
+    var nt=b.neden?'<div class="nt">ℹ '+b.neden+'</div>':'';
+
+    if(b.kalan===0){
+      div.className='k0';
+      div.innerHTML='<div class="badge blink">BUGÜN SON GÜN!</div><div class="ad">'+b.tur+kayBadge+'</div>'+nt;
+    }else if(b.kalan<=3){
+      div.className='k1';
+      div.innerHTML='<div><div class="badge blink">!! ACİL</div><div class="ad">'+b.tur+kayBadge+'</div><div class="tr">'+tStr+'</div>'+nt+'</div><div class="sayac"><div class="num blink">'+b.kalan+'</div><div class="lbl">GÜN</div></div>';
+    }else if(b.kalan<=7){
+      div.className='k2';
+      div.innerHTML='<div><div class="badge">★ YAKLASAN</div><div class="ad">'+b.tur+kayBadge+'</div><div class="tr">'+tStr+'</div>'+nt+'</div><div class="sayac"><div class="num">'+b.kalan+'</div><div class="lbl">gün</div></div>';
+    }else{
+      div.className='k3';
+      div.innerHTML='<div><div class="ad">'+b.tur+kayBadge+'</div><div class="tr">'+tStr+'</div>'+nt+'</div><div class="sayac"><div class="num">'+b.kalan+'</div><div class="lbl">gün</div></div>';
+    }
+    el.appendChild(div);
+  }
+}
+
+function bipSesi(){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [800,1200,1600].forEach(function(f,i){
+      var o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=f;
+      g.gain.setValueAtTime(0.1,ctx.currentTime+i*0.3);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.3+0.25);
+      o.start(ctx.currentTime+i*0.3);o.stop(ctx.currentTime+i*0.3+0.3);
+    });
+  }catch(e){}
+}
+
+// FİLTRE PANELİ
+var GRUP_ADLARI = {
+  'kdv':'KDV','muhtasar':'Muhtasar','kurumlar':'Kurumlar Vergisi',
+  'gelir':'Gelir Vergisi','gecici':'Geçici Vergi','sgk':'SGK / Bağ-Kur',
+  'bsmv':'Banka Sigorta Muameleleri','otv':'ÖTV','damga':'Damga Vergisi',
+  'harc':'Harçlar','sans':'Şans Oyunları','emlak':'Emlak Vergisi',
+  'mtv':'Motorlu Taşıtlar Vergisi','diger':'Diğer Vergiler'
+};
+
+function filtrePanelAc(){
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;';
+  var tum=AKTIF_GRUPLAR===null;
+  var satirlar=Object.keys(GRUP_ADLARI).map(function(k){
+    var c=tum||(AKTIF_GRUPLAR&&AKTIF_GRUPLAR.indexOf(k)>-1);
+    return '<label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1e3a5f;cursor:pointer;">'+
+      '<input type="checkbox" class="fg" data-g="'+k+'" '+(c?'checked':'')+' style="width:18px;height:18px;accent-color:#f49e0b;flex-shrink:0">'+
+      '<span style="font-size:13px;color:#e8f0fe">'+GRUP_ADLARI[k]+'</span></label>';
+  }).join('');
+  overlay.innerHTML='<div style="background:#0f2133;border-top:1px solid #1e3a5f;border-radius:20px 20px 0 0;padding:16px;width:100%;max-height:80vh;overflow-y:auto;">'+
+    '<div style="font-size:11px;font-weight:700;color:#f49e0b;letter-spacing:1.5px;margin-bottom:4px">🔽 VERGİ TÜRLERİ FİLTRESİ</div>'+
+    '<div style="font-size:11px;color:#4a7099;margin-bottom:12px">Takip etmek istediklerinizi seçin</div>'+
+    '<div style="display:flex;gap:8px;margin-bottom:12px">'+
+    '<button onclick="document.querySelectorAll(\'.fg\').forEach(function(x){x.checked=true})" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:8px;padding:8px;font-size:11px;cursor:pointer">Tümünü Seç</button>'+
+    '<button onclick="document.querySelectorAll(\'.fg\').forEach(function(x){x.checked=false})" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:8px;padding:8px;font-size:11px;cursor:pointer">Tümünü Kaldır</button>'+
+    '</div>'+
+    satirlar+
+    '<div style="display:flex;gap:10px;margin-top:14px">'+
+    '<button id="filtreKaydet" style="flex:1;background:#f49e0b;color:#000;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer">Uygula</button>'+
+    '<button onclick="this.closest(\'div[style]\').remove()" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:10px;padding:13px;font-size:13px;cursor:pointer">İptal</button>'+
+    '</div></div>';
+  document.body.appendChild(overlay);
+  document.getElementById('filtreKaydet').onclick=function(){
+    var secili=[];
+    document.querySelectorAll('.fg').forEach(function(cb){if(cb.checked) secili.push(cb.dataset.g);});
+    AKTIF_GRUPLAR = (secili.length===Object.keys(GRUP_ADLARI).length) ? null : secili;
+    overlay.remove();
+    render();
+  };
+  overlay.onclick=function(e){if(e.target===overlay) overlay.remove();};
+}
+
+function bilgiGoster(){
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:16px;';
+  overlay.innerHTML='<div style="background:#0f2133;border:1px solid #1e3a5f;border-radius:14px;padding:20px;max-width:320px;width:100%;text-align:center;">'+
+    '<div style="font-size:32px;margin-bottom:8px">📋</div>'+
+    '<div style="font-size:16px;font-weight:700;color:#f49e0b;margin-bottom:4px">Beavi Takvim</div>'+
+    '<div style="font-size:11px;color:#4a7099;margin-bottom:12px">GİB Resmi 2026 Vergi Takvimi</div>'+
+    '<div style="font-size:11px;color:#7a9cc4;line-height:1.6;margin-bottom:14px">'+
+    'Tüm beyanname ve ödeme tarihleri GİB\'in resmi 2026 vergi takvimine göre hazırlanmıştır.<br><br>'+
+    'Uzatma kararları ve değişiklikler için GİB\'i takip ediniz.<br><br>'+
+    '<strong style="color:#f49e0b">by VedatBot | SMMM</strong></div>'+
+    '<button onclick="this.closest(\'div[style]\').remove()" style="background:#f49e0b;color:#000;border:none;border-radius:10px;padding:11px 28px;font-size:13px;font-weight:700;cursor:pointer">Tamam</button>'+
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.onclick=function(e){if(e.target===overlay) overlay.remove();};
+}
+
+// PWA
+var pwaDeferred=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();pwaDeferred=e;
+  try{if(!localStorage.getItem('pwa_red'))
+    setTimeout(function(){document.getElementById('pwaEl').classList.add('show');},2500);}
+  catch(e){}
+});
+function pwaKur(){
+  document.getElementById('pwaEl').classList.remove('show');
+  if(pwaDeferred){pwaDeferred.prompt();pwaDeferred=null;}
+  else alert('iPhone: Safari\'de aç → Paylaş (□↑) → "Ana Ekrana Ekle"');
+}
+function pwaRed(){
+  document.getElementById('pwaEl').classList.remove('show');
+  try{localStorage.setItem('pwa_red','1');}catch(e){}
+}
+// iOS
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone){
+  try{if(!localStorage.getItem('pwa_red'))
+    setTimeout(function(){document.getElementById('pwaEl').classList.add('show');},3000);}
+  catch(e){}
+}
+
+render();
+setInterval(render,3600000);
+</script>
+</body>
+</html>
