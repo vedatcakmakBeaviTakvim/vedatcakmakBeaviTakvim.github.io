@@ -112,25 +112,24 @@ body{background:#0d1b2a;color:#e8f0fe;font-family:-apple-system,BlinkMacSystemFo
 </div>
 <div class="liste" id="liste"></div>
 
-<script>
-var DATA = [
-[2,"7 Nis (Sal)","SGK Primi 4/a (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],,
-[2,"7 Nis (Sal)","Bag-Kur Primi 4/b (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],,
-[22,"27 Nis (Pzt)","Muhtasar ve Prim Hizmet Beyannamesi (Mart 2026)",""],,
-[23,"28 Nis (Sal)","KDV-1 Beyannamesi (Mart 2026)",""],,
-[25,"30 Nis (Per)","Kurumlar Vergisi Beyannamesi (2025 yili)",""],,
-[25,"30 Nis (Per)","SGK Primi 4/a (Mart 2026)",""],,
-[25,"30 Nis (Per)","Bag-Kur Primi 4/b (Mart 2026)",""],,
-[43,"18 May (Pzt)","Gecici Vergi Beyannamesi (2026 I. Donem)",""],,
-[51,"26 May (Sal)","Muhtasar ve Prim Hizmet Beyannamesi (Nisan 2026)",""],,
-[51,"26 May (Sal)","KDV-1 Beyannamesi (Nisan 2026)",""],,
-[51,"26 May (Sal)","SGK Primi 4/a (Nisan 2026)",""],,
-[51,"26 May (Sal)","Bag-Kur Primi 4/b (Nisan 2026)",""],,
-[57,"1 Haz (Pzt)","KDV-1 Beyannamesi (Nisan 2026) - Ertelendi",""],,
-[82,"26 Haz (Cum)","Muhtasar ve Prim Hizmet Beyannamesi (Mayis 2026)",""],,
-[85,"29 Haz (Pzt)","KDV-1 Beyannamesi (Mayis 2026)",""],,
-[86,"30 Haz (Sal)","SGK Primi 4/a (Mayis 2026)",""],,
-[86,"30 Haz (Sal)","Bag-Kur Primi 4/b (Mayis 2026)",""],,
+<script>var DATA = [
+[2,"7 Nis (Sal)","SGK Primi 4/a (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],
+[2,"7 Nis (Sal)","Bag-Kur Primi 4/b (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],
+[22,"27 Nis (Pzt)","Muhtasar ve Prim Hizmet Beyannamesi (Mart 2026)",""],
+[23,"28 Nis (Sal)","KDV-1 Beyannamesi (Mart 2026)",""],
+[25,"30 Nis (Per)","Kurumlar Vergisi Beyannamesi (2025 yili)",""],
+[25,"30 Nis (Per)","SGK Primi 4/a (Mart 2026)",""],
+[25,"30 Nis (Per)","Bag-Kur Primi 4/b (Mart 2026)",""],
+[43,"18 May (Pzt)","Gecici Vergi Beyannamesi (2026 I. Donem)",""],
+[51,"26 May (Sal)","Muhtasar ve Prim Hizmet Beyannamesi (Nisan 2026)",""],
+[51,"26 May (Sal)","KDV-1 Beyannamesi (Nisan 2026)",""],
+[51,"26 May (Sal)","SGK Primi 4/a (Nisan 2026)",""],
+[51,"26 May (Sal)","Bag-Kur Primi 4/b (Nisan 2026)",""],
+[57,"1 Haz (Pzt)","KDV-1 Beyannamesi (Nisan 2026) - Ertelendi",""],
+[82,"26 Haz (Cum)","Muhtasar ve Prim Hizmet Beyannamesi (Mayis 2026)",""],
+[85,"29 Haz (Pzt)","KDV-1 Beyannamesi (Mayis 2026)",""],
+[86,"30 Haz (Sal)","SGK Primi 4/a (Mayis 2026)",""],
+[86,"30 Haz (Sal)","Bag-Kur Primi 4/b (Mayis 2026)",""],
 [4,"10 Nis (Cum)","e-Defter Berat Aylik - Aralik 2025 (GV)","e-Defter aylik","aylik","gv"],
 [35,"11 May (Pzt)","e-Defter Berat Aylik - Ocak 2026 (GV)","e-Defter aylik","aylik","gv"],
 [65,"10 Haz (Car)","e-Defter Berat Aylik - Subat 2026 (GV)","e-Defter aylik","aylik","gv"],
@@ -142,34 +141,31 @@ var DATA = [
 [8,"14 Nis (Sal)","e-Defter Berat 3Aylik - Eki-Kas-Ara 2025 (KV)","e-Defter 3 aylik","ucaylik","kv"],
 [70,"15 Haz (Pzt)","e-Defter Berat 3Aylik - Oca-Sub-Mar 2026 (KV)","e-Defter 3 aylik","ucaylik","kv"]
 ];
+
 var alarmAcik = false;
 var alarmTimer = null;
 
-function parseD(tarihStr) {
-  var AYLAR2 = {"Oca":0,"Sub":1,"Mar":2,"Nis":3,"May":4,"Haz":5,"Tem":6,"Agu":7,"Eyl":8,"Eki":9,"Kas":10,"Ara":11};
-  if (!tarihStr) return null;
-  var m = tarihStr.match(/^(\d+) (\w+)/);
-  if (!m) return null;
-  var gun = parseInt(m[1]);
-  var ay = AYLAR2[m[2]];
-  if (ay === undefined) return null;
-  var yil = new Date().getFullYear();
-  return new Date(yil, ay, gun);
-}
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'null'); } catch(e) { return null; } }
+function lsSet(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e) {} }
 
+function edAyarOku() {
+  var v = lsGet('beavi_edefter');
+  return v || {aktif:false, tip:'ucaylik', mukellef:'hepsi'};
+}
+function edAyarKaydet(a) { lsSet('beavi_edefter', a); }
 
 function getListe() {
   var ayar = edAyarOku();
   var sonuc = [];
-  for (var i = 0; i < DATA.length; i++) {
+  for (var i=0; i<DATA.length; i++) {
     var item = DATA[i];
     var tur = item[2];
     if (tur.indexOf('e-Defter') === 0) {
       if (!ayar.aktif) continue;
-      var itemTip = item[4] || '';
-      var itemMuk = item[5] || '';
-      if (ayar.tip !== 'hepsi' && itemTip !== ayar.tip) continue;
-      if (ayar.mukellef !== 'hepsi' && itemMuk !== ayar.mukellef) continue;
+      var tip = item[4]||'';
+      var muk = item[5]||'';
+      if (ayar.tip !== 'hepsi' && tip !== ayar.tip) continue;
+      if (ayar.mukellef !== 'hepsi' && muk !== ayar.mukellef) continue;
     }
     sonuc.push(item);
   }
@@ -177,170 +173,133 @@ function getListe() {
   return sonuc;
 }
 
+function parseD(s) {
+  var AY = {"Oca":0,"Sub":1,"Mar":2,"Nis":3,"May":4,"Haz":5,"Tem":6,"Agu":7,"Eyl":8,"Eki":9,"Kas":10,"Ara":11};
+  if (!s) return null;
+  var m = s.match(/^(\d+) (\w+)/);
+  if (!m) return null;
+  var ay = AY[m[2]];
+  if (ay === undefined) return null;
+  return new Date(new Date().getFullYear(), ay, parseInt(m[1]));
+}
+
 function render() {
   var lst = getListe();
   var bg = new Date(); bg.setHours(0,0,0,0);
-  var acil = 0, buAy = 0;
+  var acil=0, buAy=0;
   for (var i=0; i<lst.length; i++) {
-    if (lst[i][0] <= 3) acil++;
-    var t = parseD(lst[i][1]);
-    if (t && t.getMonth() === bg.getMonth() && t.getFullYear() === bg.getFullYear()) buAy++;
+    if (lst[i][0]<=3) acil++;
+    var t=parseD(lst[i][1]);
+    if (t && t.getMonth()===bg.getMonth() && t.getFullYear()===bg.getFullYear()) buAy++;
   }
   document.getElementById('sA').textContent = acil;
   document.getElementById('sB').textContent = buAy;
-  var sS = document.getElementById('sS');
-  if (lst.length > 0) {
-    sS.textContent = lst[0][0] === 0 ? 'Bugun!' : lst[0][1];
-    sS.style.fontSize = '12px';
+  var sS=document.getElementById('sS');
+  if (lst.length>0) { sS.textContent=lst[0][0]===0?'Bugun!':lst[0][1]; sS.style.fontSize='12px'; }
+  else { sS.textContent='-'; sS.style.fontSize=''; }
+  var sAEl=document.getElementById('sA');
+  if (acil>0) {
+    sAEl.className='sn blink';
+    document.getElementById('bnrTxt').textContent=acil+' acil beyanname! Son 3 gun.';
+    document.getElementById('bnr').className='bnr show';
   } else {
-    sS.textContent = '-';
-    sS.style.fontSize = '';
+    sAEl.className='sn';
+    document.getElementById('bnr').className='bnr';
   }
-  var sAEl = document.getElementById('sA');
-  if (acil > 0) {
-    sAEl.className = 'sn blink';
-    document.getElementById('bnrTxt').textContent = acil + ' acil! Son 3 gun icinde.';
-    document.getElementById('bnr').className = 'bnr show';
-    if (alarmAcik) bipSesi();
-  } else {
-    sAEl.className = 'sn';
-    document.getElementById('bnr').className = 'bnr';
-  }
-  var el = document.getElementById('liste');
-  el.innerHTML = '';
-  if (lst.length === 0) {
-    el.innerHTML = '<div class="bos">Onumuzdeki 90 gunde gorev yok.</div>';
-    return;
-  }
+  var el=document.getElementById('liste');
+  el.innerHTML='';
+  if (lst.length===0){el.innerHTML='<div class="bos">Gorev yok.</div>';return;}
   for (var j=0; j<lst.length; j++) {
-    var item = lst[j];
-    var k = item[0];
-    var tarihStr = item[1];
-    var tur = item[2];
-    var neden = item[3];
-    var isEdefter = tur.indexOf('e-Defter') === 0;
-    var div = document.createElement('div');
-    var ntHtml = neden ? '<div class="nt">i ' + neden + '</div>' : '';
-    if (k === 0) {
-      div.className = isEdefter ? 'k0 edefter' : 'k0';
-      div.innerHTML = '<div class="badge blink">BUGUN SON GUN!</div><div class="ad">' + tur + '</div>' + ntHtml;
-    } else if (k <= 3) {
-      div.className = isEdefter ? 'k1 edefter' : 'k1';
-      div.innerHTML = '<div><div class="badge blink">!! ACIL</div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num blink">' + k + '</div><div class="lbl">GUN</div></div>';
-    } else if (k <= 7) {
-      div.className = isEdefter ? 'k2 edefter' : 'k2';
-      div.innerHTML = '<div><div class="badge">* YAKLASAN</div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num">' + k + '</div><div class="lbl">gun</div></div>';
+    var item=lst[j];
+    var k=item[0], ts=item[1], tur=item[2], nd=item[3];
+    var isEd=tur.indexOf('e-Defter')===0;
+    var div=document.createElement('div');
+    var nt=nd?'<div class="nt">i '+nd+'</div>':'';
+    if (k===0) {
+      div.className=isEd?'k0 edefter':'k0';
+      div.innerHTML='<div class="badge blink">BUGUN SON GUN!</div><div class="ad">'+tur+'</div>'+nt;
+    } else if (k<=3) {
+      div.className=isEd?'k1 edefter':'k1';
+      div.innerHTML='<div><div class="badge blink">!! ACIL</div><div class="ad">'+tur+'</div><div class="tr">Son gun: '+ts+'</div>'+nt+'</div><div class="sayac"><div class="num blink">'+k+'</div><div class="lbl">GUN</div></div>';
+    } else if (k<=7) {
+      div.className=isEd?'k2 edefter':'k2';
+      div.innerHTML='<div><div class="badge">* YAKLASAN</div><div class="ad">'+tur+'</div><div class="tr">Son gun: '+ts+'</div>'+nt+'</div><div class="sayac"><div class="num">'+k+'</div><div class="lbl">gun</div></div>';
     } else {
-      div.className = isEdefter ? 'k3 edefter' : 'k3';
-      div.innerHTML = '<div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num">' + k + '</div><div class="lbl">gun</div></div>';
+      div.className=isEd?'k3 edefter':'k3';
+      div.innerHTML='<div><div class="ad">'+tur+'</div><div class="tr">Son gun: '+ts+'</div>'+nt+'</div><div class="sayac"><div class="num">'+k+'</div><div class="lbl">gun</div></div>';
     }
     el.appendChild(div);
   }
 }
 
-function toggleAlarm() {
-  alarmAcik = !alarmAcik;
-  var btn = document.getElementById('alarmBtn');
-  btn.style.borderColor = alarmAcik ? '#ff6b00' : '#1e3a5f';
-  btn.style.color = alarmAcik ? '#ff8c00' : '#7a9cc4';
-  if (alarmAcik) {
-    try {
-      var ctx = new (window.AudioContext || window.webkitAudioContext)();
-      var o = ctx.createOscillator();
-      var g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 880;
-      g.gain.setValueAtTime(0.1, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-      o.start(); o.stop(ctx.currentTime + 0.3);
-    } catch(e) {}
-  } else {
-    clearInterval(alarmTimer);
-  }
+function bipSesi() {
+  try {
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var freqs=[1000,1500,2000], times=[0,0.6,1.2];
+    for (var i=0;i<3;i++) {
+      (function(f,t){
+        var o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=f;
+        g.gain.setValueAtTime(0.12,ctx.currentTime+t);
+        g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.4);
+        o.start(ctx.currentTime+t);o.stop(ctx.currentTime+t+0.45);
+      })(freqs[i],times[i]);
+    }
+  } catch(e){}
 }
 
-// e-Defter ayar: localStorage'dan oku
-function edAyarOku() {
-  try {
-    var v = localStorage.getItem('beavi_edefter');
-    return v ? JSON.parse(v) : {aktif: false, tip: 'ucaylik', mukellef: 'hepsi'};
-  } catch(e) { return {aktif: false, tip: 'ucaylik', mukellef: 'hepsi'}; }
+function toggleAlarm() {
+  alarmAcik=!alarmAcik;
+  var btn=document.getElementById('alarmBtn');
+  if (alarmAcik){btn.innerHTML='&#128276;';btn.style.borderColor='#ff6b00';btn.style.color='#ff8c00';bipSesi();}
+  else{btn.innerHTML='&#128276;';btn.style.borderColor='#1e3a5f';btn.style.color='#7a9cc4';clearInterval(alarmTimer);}
 }
-function edAyarKaydet(ayar) {
-  try { localStorage.setItem('beavi_edefter', JSON.stringify(ayar)); } catch(e) {}
-}
+
+function closeBanner(){document.getElementById('bnr').className='bnr';clearInterval(alarmTimer);}
 
 function showInfo() {
-  var a = edAyarOku();
-  var overlay = document.createElement('div');
-  overlay.id = 'ayarModal';
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:16px';
-  overlay.innerHTML =
-    '<div style="background:#0f2133;border:1px solid #1e3a5f;border-radius:14px;padding:20px;max-width:340px;width:100%">' +
-    '<div style="font-size:11px;font-weight:700;color:#f49e0b;letter-spacing:1.5px;margin-bottom:12px">BEAVI AYARLAR</div>' +
-    '<div style="font-size:13px;font-weight:700;color:#e8f0fe;margin-bottom:16px">e-Defter Berat Takibi</div>' +
-    '<label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">' +
-    '<input type="checkbox" id="edAktif" ' + (a.aktif ? 'checked' : '') + ' style="width:18px;height:18px;accent-color:#f5c518">' +
-    '<span style="font-size:13px;color:#e8f0fe">e-Defter beratlarini takip et</span></label>' +
-    '<div id="edDetay" style="' + (a.aktif ? '' : 'display:none;') + 'background:#112640;border-radius:10px;padding:14px;margin-bottom:14px">' +
-    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">YUKLEME SIKLIGI</div>' +
-    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edTip" value="aylik" ' + (a.tip==='aylik'?'checked':'') + ' style="accent-color:#f5c518"> Aylik y\u00fckleme</label>' +
-    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edTip" value="ucaylik" ' + (a.tip==='ucaylik'?'checked':'') + ' style="accent-color:#f5c518"> 3 Aylik (Gecici Vergi)</label>' +
-    '<label style="display:flex;gap:8px;margin-bottom:12px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edTip" value="hepsi" ' + (a.tip==='hepsi'?'checked':'') + ' style="accent-color:#f5c518"> Her ikisi de (Aylik + 3 Aylik)</label>' +
-    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">MUKELLEF TURU</div>' +
-    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edMuk" value="gv" ' + (a.mukellef==='gv'?'checked':'') + ' style="accent-color:#f5c518"> GV Mukellefi (10. gun)</label>' +
-    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edMuk" value="kv" ' + (a.mukellef==='kv'?'checked':'') + ' style="accent-color:#f5c518"> KV/Diger (14. gun)</label>' +
-    '<label style="display:flex;gap:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
-    '<input type="radio" name="edMuk" value="hepsi" ' + (a.mukellef==='hepsi'?'checked':'') + ' style="accent-color:#f5c518"> Her ikisi de</label>' +
-    '</div>' +
-    '<div style="display:flex;gap:10px">' +
-    '<button onclick="ayarKaydet()" style="flex:1;background:#f5c518;color:#000;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer">Kaydet</button>' +
-    '<button id="ayarIptalBtn" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:10px;padding:11px;font-size:13px;cursor:pointer">Iptal</button>' +
-    '</div>' +
-    '<div style="margin-top:14px;border-top:1px solid #1e3a5f;padding-top:12px;font-size:11px;color:#4a7099;text-align:center">Beavi v5.1 | by VedatBot<br>WhatsApp: 05335733697</div>' +
+  var a=edAyarOku();
+  var overlay=document.createElement('div');
+  overlay.id='ayarModal';
+  overlay.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:16px';
+  overlay.innerHTML=
+    '<div style="background:#0f2133;border:1px solid #1e3a5f;border-radius:14px;padding:20px;max-width:340px;width:100%">'+
+    '<div style="font-size:11px;font-weight:700;color:#f49e0b;letter-spacing:1.5px;margin-bottom:12px">BEAVI AYARLAR</div>'+
+    '<div style="font-size:13px;font-weight:700;color:#e8f0fe;margin-bottom:16px">e-Defter Berat Takibi</div>'+
+    '<label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">'+
+    '<input type="checkbox" id="edAktif" '+(a.aktif?'checked':'')+' style="width:18px;height:18px;accent-color:#f5c518">'+
+    '<span style="font-size:13px;color:#e8f0fe">e-Defter beratlarini takip et</span></label>'+
+    '<div id="edDetay" style="'+(a.aktif?'':'display:none;')+'background:#112640;border-radius:10px;padding:14px;margin-bottom:14px">'+
+    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">YUKLEME SIKLIGI</div>'+
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edTip" value="aylik" '+(a.tip==='aylik'?'checked':'')+' style="accent-color:#f5c518"> Aylik</label>'+
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edTip" value="ucaylik" '+(a.tip==='ucaylik'||!a.tip?'checked':'')+' style="accent-color:#f5c518"> 3 Aylik</label>'+
+    '<label style="display:flex;gap:8px;margin-bottom:12px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edTip" value="hepsi" '+(a.tip==='hepsi'?'checked':'')+' style="accent-color:#f5c518"> Her ikisi</label>'+
+    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">MUKELLEF TURU</div>'+
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edMuk" value="gv" '+(a.mukellef==='gv'?'checked':'')+' style="accent-color:#f5c518"> GV (10. gun)</label>'+
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edMuk" value="kv" '+(a.mukellef==='kv'?'checked':'')+' style="accent-color:#f5c518"> KV/Diger (14. gun)</label>'+
+    '<label style="display:flex;gap:8px;cursor:pointer;color:#e8f0fe;font-size:12px"><input type="radio" name="edMuk" value="hepsi" '+(a.mukellef==='hepsi'||!a.mukellef?'checked':'')+' style="accent-color:#f5c518"> Her ikisi</label>'+
+    '</div>'+
+    '<div style="display:flex;gap:10px">'+
+    '<button id="ayarKaydetBtn" style="flex:1;background:#f5c518;color:#000;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer">Kaydet</button>'+
+    '<button id="ayarIptalBtn" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:10px;padding:11px;font-size:13px;cursor:pointer">Iptal</button>'+
+    '</div>'+
+    '<div style="margin-top:14px;border-top:1px solid #1e3a5f;padding-top:12px;font-size:11px;color:#4a7099;text-align:center">Beavi v5.1 | by VedatBot</div>'+
     '</div>';
   document.body.appendChild(overlay);
-  var iptalBtn = document.getElementById('ayarIptal');
-  if (iptalBtn) iptalBtn.onclick = function() { var m=document.getElementById('ayarModal'); if(m) m.remove(); };
-  document.getElementById('edAktif').onchange = function() {
-    document.getElementById('edDetay').style.display = this.checked ? '' : 'none';
+  document.getElementById('edAktif').onchange=function(){document.getElementById('edDetay').style.display=this.checked?'':'none';};
+  document.getElementById('ayarKaydetBtn').onclick=function(){
+    var aktif=document.getElementById('edAktif').checked;
+    var tipEl=document.querySelector('input[name="edTip"]:checked');
+    var mukEl=document.querySelector('input[name="edMuk"]:checked');
+    edAyarKaydet({aktif:aktif,tip:tipEl?tipEl.value:'ucaylik',mukellef:mukEl?mukEl.value:'hepsi'});
+    document.getElementById('ayarModal').remove();
+    render();
   };
+  document.getElementById('ayarIptalBtn').onclick=function(){document.getElementById('ayarModal').remove();};
 }
 
-function ayarKaydet() {
-  var aktif = document.getElementById('edAktif').checked;
-  var tip = document.querySelector('input[name="edTip"]:checked');
-  var muk = document.querySelector('input[name="edMuk"]:checked');
-  edAyarKaydet({
-    aktif: aktif,
-    tip: tip ? tip.value : 'ucaylik',
-    mukellef: muk ? muk.value : 'hepsi'
-  });
-  document.getElementById('ayarModal').remove();
-  render();
-}
-
-function showInfo() {
-  alert('Beavi v5.1\nby VedatBot | SMMM\n\nWhatsApp: 05335733697');
-}
-
-render();
-
-// Service Worker - offline destek
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    var sw = 'data:application/javascript,' + encodeURIComponent(
-      'self.addEventListener("install",function(e){e.waitUntil(caches.open("beavi-v1").then(function(c){return c.addAll(["/"]);}));});' +
-      'self.addEventListener("fetch",function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});'
-    );
-    navigator.serviceWorker.register(sw).catch(function(){});
-  });
-}
+window.onload=function(){render();setInterval(render,3600000);};
 </script>
 </body>
 </html>
