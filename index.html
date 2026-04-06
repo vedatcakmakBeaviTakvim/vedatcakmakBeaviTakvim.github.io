@@ -65,7 +65,7 @@ body{background:#0d1b2a;color:#e8f0fe;font-family:-apple-system,BlinkMacSystemFo
 .k2 .num{font-size:26px;font-weight:800;color:#4ade80;line-height:1}
 .k2 .lbl{font-size:8px;color:#4ade80;letter-spacing:1px;text-transform:uppercase}
 .k2 .sayac{text-align:center;flex-shrink:0}
-.k3{background:#112640;border:1px solid #1e3a5f;border-radius:12px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.k3{background:#112640;border:1px solid #1e3a5f;border-left:4px solid #1e3a5f;border-radius:12px;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .k3 .ad{font-size:12px;font-weight:600;color:#e8f0fe;margin-bottom:2px}
 .k3 .tr{font-size:10px;color:#4a7099}
 .k3 .nt{font-size:9px;color:#4a7099;margin-top:2px;font-style:italic;opacity:.75}
@@ -73,6 +73,11 @@ body{background:#0d1b2a;color:#e8f0fe;font-family:-apple-system,BlinkMacSystemFo
 .k3 .lbl{font-size:8px;color:#4a7099;letter-spacing:1px;text-transform:uppercase}
 .k3 .sayac{text-align:center;flex-shrink:0}
 .bos{text-align:center;padding:40px 16px;color:#4a7099;font-size:13px}
+.edefter{border-left-color:#f5c518!important;background:#1a1600!important;}
+.edefter .ad{color:#fde68a!important;}
+.edefter .num{color:#f5c518!important;}
+.edefter .tr{color:#a07c00!important;}
+.edefter .badge{color:#f5c518!important;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .blink{animation:blink 1s ease-in-out infinite}
 </style>
@@ -85,7 +90,7 @@ body{background:#0d1b2a;color:#e8f0fe;font-family:-apple-system,BlinkMacSystemFo
   </div>
   <div class="hbs">
     <button class="ib" id="alarmBtn" onclick="toggleAlarm()">&#128276;</button>
-    <button class="ib" onclick="showInfo()">&#183;&#183;&#183;</button>
+    <button class="ib" onclick="showInfo()" title="Ayarlar">&#9881;</button>
   </div>
 </header>
 
@@ -109,58 +114,127 @@ body{background:#0d1b2a;color:#e8f0fe;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 var DATA = [
-[2,"7 Nis (Sal)","SGK Primi 4/a (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],
-[2,"7 Nis (Sal)","Bag-Kur Primi 4/b (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],
-[22,"27 Nis (Pzt)","Muhtasar ve Prim Hizmet Beyannamesi (Mart 2026)",""],
-[23,"28 Nis (Sal)","KDV-1 Beyannamesi (Mart 2026)",""],
-[25,"30 Nis (Per)","Kurumlar Vergisi Beyannamesi (2025 yili)",""],
-[25,"30 Nis (Per)","SGK Primi 4/a (Mart 2026)",""],
-[25,"30 Nis (Per)","Bag-Kur Primi 4/b (Mart 2026)",""],
-[43,"18 May (Pzt)","Gecici Vergi Beyannamesi (2026 I. Donem)",""],
-[51,"26 May (Sal)","Muhtasar ve Prim Hizmet Beyannamesi (Nisan 2026)",""],
-[51,"26 May (Sal)","KDV-1 Beyannamesi (Nisan 2026)",""],
-[51,"26 May (Sal)","SGK Primi 4/a (Nisan 2026)",""],
-[51,"26 May (Sal)","Bag-Kur Primi 4/b (Nisan 2026)",""],
-[57,"1 Haz (Pzt)","KDV-1 Beyannamesi (Nisan 2026) - Ertelendi",""],
-[82,"26 Haz (Cum)","Muhtasar ve Prim Hizmet Beyannamesi (Mayis 2026)",""],
-[85,"29 Haz (Pzt)","KDV-1 Beyannamesi (Mayis 2026)",""],
-[86,"30 Haz (Sal)","SGK Primi 4/a (Mayis 2026)",""],
-[86,"30 Haz (Sal)","Bag-Kur Primi 4/b (Mayis 2026)",""]
+[2,"7 Nis (Sal)","SGK Primi 4/a (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],,
+[2,"7 Nis (Sal)","Bag-Kur Primi 4/b (Subat 2026)","Devlet uzatmasi: 31 Mar > 07 Nis"],,
+[22,"27 Nis (Pzt)","Muhtasar ve Prim Hizmet Beyannamesi (Mart 2026)",""],,
+[23,"28 Nis (Sal)","KDV-1 Beyannamesi (Mart 2026)",""],,
+[25,"30 Nis (Per)","Kurumlar Vergisi Beyannamesi (2025 yili)",""],,
+[25,"30 Nis (Per)","SGK Primi 4/a (Mart 2026)",""],,
+[25,"30 Nis (Per)","Bag-Kur Primi 4/b (Mart 2026)",""],,
+[43,"18 May (Pzt)","Gecici Vergi Beyannamesi (2026 I. Donem)",""],,
+[51,"26 May (Sal)","Muhtasar ve Prim Hizmet Beyannamesi (Nisan 2026)",""],,
+[51,"26 May (Sal)","KDV-1 Beyannamesi (Nisan 2026)",""],,
+[51,"26 May (Sal)","SGK Primi 4/a (Nisan 2026)",""],,
+[51,"26 May (Sal)","Bag-Kur Primi 4/b (Nisan 2026)",""],,
+[57,"1 Haz (Pzt)","KDV-1 Beyannamesi (Nisan 2026) - Ertelendi",""],,
+[82,"26 Haz (Cum)","Muhtasar ve Prim Hizmet Beyannamesi (Mayis 2026)",""],,
+[85,"29 Haz (Pzt)","KDV-1 Beyannamesi (Mayis 2026)",""],,
+[86,"30 Haz (Sal)","SGK Primi 4/a (Mayis 2026)",""],,
+[86,"30 Haz (Sal)","Bag-Kur Primi 4/b (Mayis 2026)",""],,
+[4,"10 Nis (Cum)","e-Defter Berat Aylik - Aralik 2025 (GV)","e-Defter aylik","aylik","gv"],
+[35,"11 May (Pzt)","e-Defter Berat Aylik - Ocak 2026 (GV)","e-Defter aylik","aylik","gv"],
+[65,"10 Haz (Car)","e-Defter Berat Aylik - Subat 2026 (GV)","e-Defter aylik","aylik","gv"],
+[38,"14 May (Per)","e-Defter Berat Aylik - Aralik 2025 (KV)","e-Defter aylik","aylik","kv"],
+[38,"14 May (Per)","e-Defter Berat Aylik - Ocak 2026 (KV)","e-Defter aylik","aylik","kv"],
+[70,"15 Haz (Pzt)","e-Defter Berat Aylik - Subat 2026 (KV)","e-Defter aylik","aylik","kv"],
+[4,"10 Nis (Cum)","e-Defter Berat 3Aylik - Eki-Kas-Ara 2025 (GV)","e-Defter 3 aylik","ucaylik","gv"],
+[65,"10 Haz (Car)","e-Defter Berat 3Aylik - Oca-Sub-Mar 2026 (GV)","e-Defter 3 aylik","ucaylik","gv"],
+[8,"14 Nis (Sal)","e-Defter Berat 3Aylik - Eki-Kas-Ara 2025 (KV)","e-Defter 3 aylik","ucaylik","kv"],
+[70,"15 Haz (Pzt)","e-Defter Berat 3Aylik - Oca-Sub-Mar 2026 (KV)","e-Defter 3 aylik","ucaylik","kv"]
 ];
 var alarmAcik = false;
 var alarmTimer = null;
 
-function render() {
-  var el = document.getElementById('liste');
-  el.innerHTML = '';
+function parseD(tarihStr) {
+  var AYLAR2 = {"Oca":0,"Sub":1,"Mar":2,"Nis":3,"May":4,"Haz":5,"Tem":6,"Agu":7,"Eyl":8,"Eki":9,"Kas":10,"Ara":11};
+  if (!tarihStr) return null;
+  var m = tarihStr.match(/^(\d+) (\w+)/);
+  if (!m) return null;
+  var gun = parseInt(m[1]);
+  var ay = AYLAR2[m[2]];
+  if (ay === undefined) return null;
+  var yil = new Date().getFullYear();
+  return new Date(yil, ay, gun);
+}
+
+
+function getListe() {
+  var ayar = edAyarOku();
+  var sonuc = [];
   for (var i = 0; i < DATA.length; i++) {
     var item = DATA[i];
+    var tur = item[2];
+    if (tur.indexOf('e-Defter') === 0) {
+      if (!ayar.aktif) continue;
+      var itemTip = item[4] || '';
+      var itemMuk = item[5] || '';
+      if (ayar.tip !== 'hepsi' && itemTip !== ayar.tip) continue;
+      if (ayar.mukellef !== 'hepsi' && itemMuk !== ayar.mukellef) continue;
+    }
+    sonuc.push(item);
+  }
+  sonuc.sort(function(a,b){return a[0]-b[0];});
+  return sonuc;
+}
+
+function render() {
+  var lst = getListe();
+  var bg = new Date(); bg.setHours(0,0,0,0);
+  var acil = 0, buAy = 0;
+  for (var i=0; i<lst.length; i++) {
+    if (lst[i][0] <= 3) acil++;
+    var t = parseD(lst[i][1]);
+    if (t && t.getMonth() === bg.getMonth() && t.getFullYear() === bg.getFullYear()) buAy++;
+  }
+  document.getElementById('sA').textContent = acil;
+  document.getElementById('sB').textContent = buAy;
+  var sS = document.getElementById('sS');
+  if (lst.length > 0) {
+    sS.textContent = lst[0][0] === 0 ? 'Bugun!' : lst[0][1];
+    sS.style.fontSize = '12px';
+  } else {
+    sS.textContent = '-';
+    sS.style.fontSize = '';
+  }
+  var sAEl = document.getElementById('sA');
+  if (acil > 0) {
+    sAEl.className = 'sn blink';
+    document.getElementById('bnrTxt').textContent = acil + ' acil! Son 3 gun icinde.';
+    document.getElementById('bnr').className = 'bnr show';
+    if (alarmAcik) bipSesi();
+  } else {
+    sAEl.className = 'sn';
+    document.getElementById('bnr').className = 'bnr';
+  }
+  var el = document.getElementById('liste');
+  el.innerHTML = '';
+  if (lst.length === 0) {
+    el.innerHTML = '<div class="bos">Onumuzdeki 90 gunde gorev yok.</div>';
+    return;
+  }
+  for (var j=0; j<lst.length; j++) {
+    var item = lst[j];
     var k = item[0];
     var tarihStr = item[1];
     var tur = item[2];
     var neden = item[3];
+    var isEdefter = tur.indexOf('e-Defter') === 0;
     var div = document.createElement('div');
     var ntHtml = neden ? '<div class="nt">i ' + neden + '</div>' : '';
     if (k === 0) {
-      div.className = 'k0';
+      div.className = isEdefter ? 'k0 edefter' : 'k0';
       div.innerHTML = '<div class="badge blink">BUGUN SON GUN!</div><div class="ad">' + tur + '</div>' + ntHtml;
     } else if (k <= 3) {
-      div.className = 'k1';
+      div.className = isEdefter ? 'k1 edefter' : 'k1';
       div.innerHTML = '<div><div class="badge blink">!! ACIL</div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num blink">' + k + '</div><div class="lbl">GUN</div></div>';
     } else if (k <= 7) {
-      div.className = 'k2';
+      div.className = isEdefter ? 'k2 edefter' : 'k2';
       div.innerHTML = '<div><div class="badge">* YAKLASAN</div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num">' + k + '</div><div class="lbl">gun</div></div>';
     } else {
-      div.className = 'k3';
+      div.className = isEdefter ? 'k3 edefter' : 'k3';
       div.innerHTML = '<div><div class="ad">' + tur + '</div><div class="tr">Son gun: ' + tarihStr + '</div>' + ntHtml + '</div><div class="sayac"><div class="num">' + k + '</div><div class="lbl">gun</div></div>';
     }
     el.appendChild(div);
-  }
-  var aEl = document.getElementById('sA');
-  aEl.textContent = '2';
-  if (2 > 0) {
-    aEl.className = 'sn blink';
-    document.getElementById('bnr').className = 'bnr show';
   }
 }
 
@@ -185,8 +259,74 @@ function toggleAlarm() {
   }
 }
 
+// e-Defter ayar: localStorage'dan oku
+function edAyarOku() {
+  try {
+    var v = localStorage.getItem('beavi_edefter');
+    return v ? JSON.parse(v) : {aktif: false, tip: 'ucaylik', mukellef: 'hepsi'};
+  } catch(e) { return {aktif: false, tip: 'ucaylik', mukellef: 'hepsi'}; }
+}
+function edAyarKaydet(ayar) {
+  try { localStorage.setItem('beavi_edefter', JSON.stringify(ayar)); } catch(e) {}
+}
+
 function showInfo() {
-  alert('Beavi v5.0\nby VedatBot | SMMM\n\nWhatsApp: 05335733697');
+  var a = edAyarOku();
+  var overlay = document.createElement('div');
+  overlay.id = 'ayarModal';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:16px';
+  overlay.innerHTML =
+    '<div style="background:#0f2133;border:1px solid #1e3a5f;border-radius:14px;padding:20px;max-width:340px;width:100%">' +
+    '<div style="font-size:11px;font-weight:700;color:#f49e0b;letter-spacing:1.5px;margin-bottom:12px">BEAVI AYARLAR</div>' +
+    '<div style="font-size:13px;font-weight:700;color:#e8f0fe;margin-bottom:16px">e-Defter Berat Takibi</div>' +
+    '<label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer">' +
+    '<input type="checkbox" id="edAktif" ' + (a.aktif ? 'checked' : '') + ' style="width:18px;height:18px;accent-color:#f5c518">' +
+    '<span style="font-size:13px;color:#e8f0fe">e-Defter beratlarini takip et</span></label>' +
+    '<div id="edDetay" style="' + (a.aktif ? '' : 'display:none;') + 'background:#112640;border-radius:10px;padding:14px;margin-bottom:14px">' +
+    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">YUKLEME SIKLIGI</div>' +
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edTip" value="aylik" ' + (a.tip==='aylik'?'checked':'') + ' style="accent-color:#f5c518"> Aylik y\u00fckleme</label>' +
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edTip" value="ucaylik" ' + (a.tip==='ucaylik'?'checked':'') + ' style="accent-color:#f5c518"> 3 Aylik (Gecici Vergi)</label>' +
+    '<label style="display:flex;gap:8px;margin-bottom:12px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edTip" value="hepsi" ' + (a.tip==='hepsi'?'checked':'') + ' style="accent-color:#f5c518"> Her ikisi de (Aylik + 3 Aylik)</label>' +
+    '<div style="font-size:11px;color:#7a9cc4;margin-bottom:8px;font-weight:600">MUKELLEF TURU</div>' +
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edMuk" value="gv" ' + (a.mukellef==='gv'?'checked':'') + ' style="accent-color:#f5c518"> GV Mukellefi (10. gun)</label>' +
+    '<label style="display:flex;gap:8px;margin-bottom:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edMuk" value="kv" ' + (a.mukellef==='kv'?'checked':'') + ' style="accent-color:#f5c518"> KV/Diger (14. gun)</label>' +
+    '<label style="display:flex;gap:8px;cursor:pointer;color:#e8f0fe;font-size:12px">' +
+    '<input type="radio" name="edMuk" value="hepsi" ' + (a.mukellef==='hepsi'?'checked':'') + ' style="accent-color:#f5c518"> Her ikisi de</label>' +
+    '</div>' +
+    '<div style="display:flex;gap:10px">' +
+    '<button onclick="ayarKaydet()" style="flex:1;background:#f5c518;color:#000;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer">Kaydet</button>' +
+    '<button id="ayarIptalBtn" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:10px;padding:11px;font-size:13px;cursor:pointer">Iptal</button>' +
+    '</div>' +
+    '<div style="margin-top:14px;border-top:1px solid #1e3a5f;padding-top:12px;font-size:11px;color:#4a7099;text-align:center">Beavi v5.1 | by VedatBot<br>WhatsApp: 05335733697</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  var iptalBtn = document.getElementById('ayarIptal');
+  if (iptalBtn) iptalBtn.onclick = function() { var m=document.getElementById('ayarModal'); if(m) m.remove(); };
+  document.getElementById('edAktif').onchange = function() {
+    document.getElementById('edDetay').style.display = this.checked ? '' : 'none';
+  };
+}
+
+function ayarKaydet() {
+  var aktif = document.getElementById('edAktif').checked;
+  var tip = document.querySelector('input[name="edTip"]:checked');
+  var muk = document.querySelector('input[name="edMuk"]:checked');
+  edAyarKaydet({
+    aktif: aktif,
+    tip: tip ? tip.value : 'ucaylik',
+    mukellef: muk ? muk.value : 'hepsi'
+  });
+  document.getElementById('ayarModal').remove();
+  render();
+}
+
+function showInfo() {
+  alert('Beavi v5.1\nby VedatBot | SMMM\n\nWhatsApp: 05335733697');
 }
 
 render();
