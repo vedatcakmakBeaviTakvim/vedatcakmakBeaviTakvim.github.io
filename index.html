@@ -119,6 +119,15 @@ body{background:var(--bg);color:var(--t1);
 .nb.aon{color:var(--actxt);}
 .nb .ico{font-size:20px;line-height:1;}
 
+/* iOS REHBER POPUP */
+.ios-rehber{display:none;position:fixed;bottom:80px;left:12px;right:12px;
+  background:#1a2744;border:1px solid #2a3a6a;border-radius:16px;padding:16px;z-index:9999;}
+.ios-rehber.show{display:block;}
+.ios-rehber h3{font-size:14px;font-weight:700;color:var(--sari);margin-bottom:10px;text-align:center;}
+.ios-adim{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #2a3a6a;font-size:13px;color:var(--t1);}
+.ios-adim:last-of-type{border-bottom:none;}
+.ios-adim-no{width:22px;height:22px;background:var(--sari);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.ios-kapat{width:100%;margin-top:10px;background:transparent;color:var(--t3);border:1px solid var(--brd);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;}
 /* PWA PROMPT */
 .pwa{display:none;position:fixed;bottom:72px;left:12px;right:12px;
   background:var(--bg2);border:1px solid var(--sari);border-radius:14px;
@@ -167,6 +176,16 @@ body{background:var(--bg);color:var(--t1);
 </div>
 <div class="liste" id="liste"></div>
 
+<!-- iOS Ana Ekran Rehberi -->
+<div class="ios-rehber" id="iosRehber">
+  <h3>📲 Ana Ekrana Nasıl Eklenir?</h3>
+  <div class="ios-adim"><div class="ios-adim-no">1</div><span>Safari tarayıcısında bu sayfayı açın</span></div>
+  <div class="ios-adim"><div class="ios-adim-no">2</div><span>Alttaki <strong>Paylaş</strong> butonuna dokunun <span style="font-size:16px">⬜↑</span></span></div>
+  <div class="ios-adim"><div class="ios-adim-no">3</div><span><strong>"Ana Ekrana Ekle"</strong> seçeneğine dokunun</span></div>
+  <div class="ios-adim"><div class="ios-adim-no">4</div><span>Sağ üstten <strong>"Ekle"</strong> butonuna basın</span></div>
+  <button class="ios-kapat" onclick="iosRehberKapat()">Tamam, anladım</button>
+</div>
+
 <!-- PWA Install -->
 <div class="pwa" id="pwaEl">
   <h3>📲 Ana Ekrana Ekle</h3>
@@ -194,6 +213,10 @@ body{background:var(--bg);color:var(--t1);
   <button class="nb" onclick="bilgiGoster()">
     <span class="ico">ℹ️</span>
     <span>Hakkında</span>
+  </button>
+  <button class="nb" id="ekleBtn" onclick="anaEkranaEkle()">
+    <span class="ico">📲</span>
+    <span>Ekle</span>
   </button>
 </nav>
 
@@ -710,7 +733,25 @@ window.addEventListener('beforeinstallprompt',function(e){
 function pwaKur(){
   document.getElementById('pwaEl').classList.remove('show');
   if(pwaDeferred){pwaDeferred.prompt();pwaDeferred=null;}
-  else alert('iPhone: Safari\'de aç → Paylaş (□↑) → "Ana Ekrana Ekle"');
+  else iosRehberGoster();
+}
+function anaEkranaEkle(){
+  // Android/Chrome: sistem prompt varsa aç
+  if(pwaDeferred){
+    pwaDeferred.prompt();
+    pwaDeferred.userChoice.then(function(r){
+      if(r.outcome==='accepted') pwaDeferred=null;
+    });
+  } else {
+    // iOS veya prompt yoksa rehber göster
+    iosRehberGoster();
+  }
+}
+function iosRehberGoster(){
+  document.getElementById('iosRehber').classList.add('show');
+}
+function iosRehberKapat(){
+  document.getElementById('iosRehber').classList.remove('show');
 }
 function pwaRed(){
   document.getElementById('pwaEl').classList.remove('show');
