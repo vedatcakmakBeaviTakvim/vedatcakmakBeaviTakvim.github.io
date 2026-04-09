@@ -469,7 +469,7 @@ var AKTIF_GRUPLAR = (function(){
   try{var v=localStorage.getItem('beavi_filtre');if(v===null)return null;return JSON.parse(v);}
   catch(e){return null;}
 })();
-var eDeftSiklik = 'her_ikisi'; // 'aylik', 'yillik', 'her_ikisi'
+var eDeftSiklik = (function(){try{var v=localStorage.getItem('beavi_edeft_siklik');return v||'her_ikisi';}catch(e){return 'her_ikisi';}})();
 var eDeftMukTur = 'her_ikisi'; // 'gv', 'kv', 'her_ikisi'
 
 function grupDonustur(g) {
@@ -538,6 +538,19 @@ function alarmToggle(){
   else{btn.classList.remove('aon');lbl.textContent='Alarm';}
 }
 
+
+function toggleEdeftRow(show){
+  var r=document.getElementById('edeft-siklik-row');
+  if(r) r.style.display=show?'flex':'none';
+}
+function setSiklik(btn){
+  eDeftSiklik=btn.dataset.s;
+  document.querySelectorAll('.edeft-sik-btn').forEach(function(b){
+    var ak=b.dataset.s===eDeftSiklik;
+    b.style.background=ak?'#f49e0b':'#1e3a5f';
+    b.style.color=ak?'#000':'#7a9cc4';
+  });
+}
 function render(){
   var now=new Date();
   var g=GUNLER[now.getDay()];
@@ -648,13 +661,35 @@ function filtrePanelAc(){
   var tum=AKTIF_GRUPLAR===null;
   var satirlar=Object.keys(GRUP_ADLARI).map(function(k){
     var c=tum||(AKTIF_GRUPLAR&&AKTIF_GRUPLAR.indexOf(k)>-1);
-    return '<label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1e3a5f;cursor:pointer;">'+
-      '<input type="checkbox" class="fg" data-g="'+k+'" '+(c?'checked':'')+' style="width:18px;height:18px;accent-color:#f49e0b;flex-shrink:0">'+
-      '<span style="font-size:13px;color:#e8f0fe">'+GRUP_ADLARI[k]+'</span></label>';
+    if(k==='edefter'){
+      var chk = c ? 'checked' : '';
+      var disp = c ? 'flex' : 'none';
+      var s1b = eDeftSiklik==='aylik'    ? '#f49e0b' : '#1e3a5f';
+      var s1c = eDeftSiklik==='aylik'    ? '#000'    : '#7a9cc4';
+      var s2b = eDeftSiklik==='yillik'   ? '#f49e0b' : '#1e3a5f';
+      var s2c = eDeftSiklik==='yillik'   ? '#000'    : '#7a9cc4';
+      var s3b = eDeftSiklik==='her_ikisi'? '#f49e0b' : '#1e3a5f';
+      var s3c = eDeftSiklik==='her_ikisi'? '#000'    : '#7a9cc4';
+      return '<label style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #1e3a5f;">' +
+        '<input type="checkbox" class="fg" data-g="edefter" ' + chk + ' onchange="toggleEdeftRow(this.checked)" style="width:18px;height:18px;accent-color:#f49e0b;flex-shrink:0;margin-top:2px">' +
+        '<div style="flex:1">' +
+          '<span style="font-size:13px;color:#e8f0fe">e-Defter Berat Yükleme</span>' +
+          '<div id="edeft-siklik-row" style="display:' + disp + ';gap:6px;flex-wrap:wrap;margin-top:7px;align-items:center">' +
+            '<span style="font-size:10px;color:#7a9cc4">S\u0131kl\u0131k:</span>' +
+            '<button class="edeft-sik-btn" data-s="aylik" onclick="setSiklik(this)" style="border:none;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;background:' + s1b + ';color:' + s1c + '">Ayl\u0131k</button>' +
+            '<button class="edeft-sik-btn" data-s="yillik" onclick="setSiklik(this)" style="border:none;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;background:' + s2b + ';color:' + s2c + '">Y\u0131ll\u0131k</button>' +
+            '<button class="edeft-sik-btn" data-s="her_ikisi" onclick="setSiklik(this)" style="border:none;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;background:' + s3b + ';color:' + s3c + '">Her \u0130kisi</button>' +
+          '</div>' +
+        '</div>' +
+        '</label>';
+    }
+    return '<label style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1e3a5f;cursor:pointer;">' +
+      '<input type="checkbox" class="fg" data-g="' + k + '" ' + (c?'checked':'') + ' style="width:18px;height:18px;accent-color:#f49e0b;flex-shrink:0">' +
+      '<span style="font-size:13px;color:#e8f0fe">' + GRUP_ADLARI[k] + '</span></label>';
   }).join('');
   overlay.innerHTML='<div style="background:#0f2133;border-top:1px solid #1e3a5f;border-radius:20px 20px 0 0;padding:16px;width:100%;max-height:80vh;overflow-y:auto;">'+
     '<div style="font-size:11px;font-weight:700;color:#f49e0b;letter-spacing:1.5px;margin-bottom:4px">🔽 VERGİ TÜRLERİ FİLTRESİ</div>'+
-    '<div style="font-size:11px;color:#4a7099;margin-bottom:12px">Takip etmek istediklerinizi seçin</div>'+
+    '<div style="font-size:11px;color:#4a7099;margin-bottom:12px">Takip etmek istediklerinizi seçin — istemediğinizin işaretini kaldırın, Uygula butonuna basın. Seçimler kaydedilir.</div>'+
     '<div style="display:flex;gap:8px;margin-bottom:12px">'+
     '<button onclick="document.querySelectorAll(\'.fg\').forEach(function(x){x.checked=true})" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:8px;padding:8px;font-size:11px;cursor:pointer">Tümünü Seç</button>'+
     '<button onclick="document.querySelectorAll(\'.fg\').forEach(function(x){x.checked=false})" style="flex:1;background:#1e3a5f;color:#7a9cc4;border:none;border-radius:8px;padding:8px;font-size:11px;cursor:pointer">Tümünü Kaldır</button>'+
@@ -669,7 +704,8 @@ function filtrePanelAc(){
     var secili=[];
     document.querySelectorAll('.fg').forEach(function(cb){if(cb.checked) secili.push(cb.dataset.g);});
     AKTIF_GRUPLAR = (secili.length===Object.keys(GRUP_ADLARI).length) ? null : secili;
-    try{localStorage.setItem('beavi_filtre',JSON.stringify(AKTIF_GRUPLAR));}catch(e){}
+    try{localStorage.setItem('beavi_filtre',JSON.stringify(AKTIF_GRUPLAR));
+        localStorage.setItem('beavi_edeft_siklik',eDeftSiklik);}catch(e){}
     overlay.remove();
     render();
   };
