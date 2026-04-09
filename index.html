@@ -472,6 +472,24 @@ var AKTIF_GRUPLAR = (function(){
 var eDeftSiklik = 'her_ikisi'; // 'aylik', 'yillik', 'her_ikisi'
 var eDeftMukTur = 'her_ikisi'; // 'gv', 'kv', 'her_ikisi'
 
+function grupDonustur(g) {
+  // 'diger' grubundaki kayıtları tur ismine göre doğru gruba ata
+  if(g.grup !== 'diger') return g.grup;
+  var t = (g.tur || '').toLowerCase();
+  if(t.indexOf('konaklama') > -1) return 'konaklama';
+  if(t.indexOf('haberleşme') > -1 || t.indexOf('haberlesme') > -1) return 'haberlesme';
+  if(t.indexOf('dijital') > -1) return 'dijital';
+  if(t.indexOf('elektrik') > -1 || t.indexOf('havagaz') > -1) return 'elektrik';
+  if(t.indexOf('kkdf') > -1) return 'kkdf';
+  if(t.indexOf('özel iletişim') > -1 || t.indexOf('ozel iletisim') > -1) return 'oiv';
+  if(t.indexOf('ilan') > -1 || t.indexOf('reklam') > -1) return 'ilan';
+  if(t.indexOf('eğlence') > -1 || t.indexOf('eglence') > -1) return 'eglence';
+  if(t.indexOf('yangın') > -1) return 'yangın';
+  if(t.indexOf('veraset') > -1) return 'veraset';
+  if(t.indexOf('çevre') > -1 || t.indexOf('cevre') > -1) return 'cevre';
+  return 'diger';
+}
+
 function eDeftFiltrele(g){
   if(g.grup !== 'edefter') return true;
   var tur = g.tur || '';
@@ -498,7 +516,7 @@ function getListe(){
   for(var i=0;i<TUMVERI.length;i++){
     try{
       var g=TUMVERI[i];
-      if(AKTIF_GRUPLAR && g.grup && AKTIF_GRUPLAR.indexOf(g.grup)===-1) continue;
+      var _gk=grupDonustur(g); if(AKTIF_GRUPLAR && _gk && AKTIF_GRUPLAR.indexOf(_gk)===-1) continue;
       if(!eDeftFiltrele(g)) continue;
       var t=parseD(g.tarih);
       var k=kalanGun(t);
@@ -597,11 +615,31 @@ function bipSesi(){
 // FİLTRE PANELİ
 var GRUP_ADLARI = {
   'edefter':'e-Defter Berat Yükleme',
-  'kdv':'KDV','muhtasar':'Muhtasar','kurumlar':'Kurumlar Vergisi',
-  'gelir':'Gelir Vergisi','gecici':'Geçici Vergi','sgk':'SGK / Bağ-Kur',
-  'bsmv':'Banka Sigorta Muameleleri','otv':'ÖTV','damga':'Damga Vergisi',
-  'harc':'Harçlar','sans':'Şans Oyunları','emlak':'Emlak Vergisi',
-  'mtv':'Motorlu Taşıtlar Vergisi','diger':'Diğer Vergiler'
+  'kdv':'KDV',
+  'muhtasar':'Muhtasar',
+  'kurumlar':'Kurumlar Vergisi',
+  'gelir':'Gelir Vergisi',
+  'gecici':'Geçici Vergi',
+  'sgk':'SGK / Bağ-Kur',
+  'bsmv':'Banka ve Sigorta Muameleleri',
+  'otv':'ÖTV',
+  'damga':'Damga Vergisi',
+  'harc':'Harçlar',
+  'sans':'Şans Oyunları',
+  'emlak':'Emlak Vergisi',
+  'mtv':'Motorlu Taşıtlar Vergisi',
+  'konaklama':'Konaklama Vergisi',
+  'haberlesme':'Haberleşme Vergisi',
+  'dijital':'Dijital Hizmet Vergisi',
+  'elektrik':'Elektrik ve Havagazı Tüketim Vergisi',
+  'kkdf':'KKDF Kesintisi',
+  'oiv':'Özel İletişim Vergisi',
+  'ilan':'İlan ve Reklam Vergisi',
+  'eglence':'Eğlence Vergisi',
+  'yangın':'Yangın Sigortası Vergisi',
+  'veraset':'Veraset ve İntikal Vergisi',
+  'cevre':'Çevre Temizlik Vergisi',
+  'diger':'Diğer Vergiler'
 };
 
 function filtrePanelAc(){
