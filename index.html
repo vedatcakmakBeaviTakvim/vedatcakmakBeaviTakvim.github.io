@@ -160,7 +160,7 @@ body{background:var(--bg);color:var(--t1);
 <div class="bnr" id="bnr">
   <span style="font-size:20px">🚨</span>
   <span class="bt" id="bnrTxt">Acil beyanname var!</span>
-  <button class="bx" onclick="document.getElementById('bnr').className='bnr'">✕</button>
+  <button class="bx" onclick="document.getElementById('bnr').className='bnr';bipDurdur()">✕</button>
 </div>
 
 <div class="shdr">
@@ -196,6 +196,10 @@ body{background:var(--bg);color:var(--t1);
   <button class="nb" onclick="bilgiGoster()">
     <span class="ico">ℹ️</span>
     <span>Hakkında</span>
+  </button>
+  <button class="nb" onclick="anaEkranaEkle()">
+    <span class="ico">📲</span>
+    <span>Ekle</span>
   </button>
 </nav>
 
@@ -432,6 +436,69 @@ var CACHE = [
 {"tarih":"2026-11-16","tur":"e-Defter Berat Yükleme - Aylık KV Mükellefleri (Temmuz 2026)","kaynak":"GIB","grup":"edefter"},
 {"tarih":"2026-12-10","tur":"e-Defter Berat Yükleme - Aylık GV Mükellefleri (Eylül 2026)","kaynak":"GIB","grup":"edefter"},
 {"tarih":"2026-12-14","tur":"e-Defter Berat Yükleme - Aylık KV Mükellefleri (Ağustos 2026)","kaynak":"GIB","grup":"edefter"}
+,
+{"tarih":"2026-04-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Ekim 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-04-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Kasım 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-04-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Aralık 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-01-16","tur":"OTV - Petrol/Doğalgaz (Aralık 2025)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-02-16","tur":"OTV - Petrol/Doğalgaz (Ocak 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-03-16","tur":"OTV - Petrol/Doğalgaz (Şubat 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-04-15","tur":"OTV - Petrol/Doğalgaz (Mart 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-05-15","tur":"OTV - Petrol/Doğalgaz (Nisan 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-06-15","tur":"OTV - Petrol/Doğalgaz (Mayıs 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-07-16","tur":"OTV - Petrol/Doğalgaz (Haziran 2026)","kaynak":"GIB","grup":"otv","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-08-17","tur":"OTV - Petrol/Doğalgaz (Temmuz 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-09-15","tur":"OTV - Petrol/Doğalgaz (Ağustos 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-10-15","tur":"OTV - Petrol/Doğalgaz (Eylül 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-11-16","tur":"OTV - Petrol/Doğalgaz (Ekim 2026)","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-12-15","tur":"OTV - Petrol/Doğalgaz (Kasım 2026)","kaynak":"GIB","grup":"otv"}
+,
+{"tarih":"2026-02-16","tur":"e-Defter Berat Yükleme - Aylık KV Mükellefleri (Ekim 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-03-16","tur":"e-Defter Berat Yükleme - Aylık KV Mükellefleri (Kasım 2025)","kaynak":"GIB","grup":"edefter"}
+,
+{"tarih":"2026-01-12","tur":"e-Defter Berat Yükleme - Aylık GV Mükellefleri (Eylül 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-01-14","tur":"e-Defter Berat Yükleme - Aylık KV Mükellefleri (Eylül 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-01-26","tur":"OTV - Petrol/Doğalgaz 1-15 Ocak 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-02-25","tur":"OTV - Petrol/Doğalgaz 1-15 Şubat 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-03-25","tur":"OTV - Petrol/Doğalgaz 1-15 Mart 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-04-10","tur":"OTV - Petrol/Doğalgaz 16-31 Mart 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-04-27","tur":"OTV - Petrol/Doğalgaz 1-15 Nisan 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-05-11","tur":"OTV - Petrol/Doğalgaz 16-30 Nisan 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-05-25","tur":"OTV - Petrol/Doğalgaz 1-15 Mayıs 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-06-10","tur":"OTV - Petrol/Doğalgaz 16-31 Mayıs 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-06-25","tur":"OTV - Petrol/Doğalgaz 1-15 Haziran 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-07-10","tur":"OTV - Petrol/Doğalgaz 16-30 Haziran 2026","kaynak":"GIB","grup":"otv","uzatma_notu":"Mali Tatil: 1-20 Temmuz"},
+{"tarih":"2026-07-27","tur":"OTV - Petrol/Doğalgaz 1-15 Temmuz 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-08-10","tur":"OTV - Petrol/Doğalgaz 16-31 Temmuz 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-08-25","tur":"OTV - Petrol/Doğalgaz 1-15 Ağustos 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-09-10","tur":"OTV - Petrol/Doğalgaz 16-31 Ağustos 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-09-25","tur":"OTV - Petrol/Doğalgaz 1-15 Eylül 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-10-12","tur":"OTV - Petrol/Doğalgaz 16-30 Eylül 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-10-26","tur":"OTV - Petrol/Doğalgaz 1-15 Ekim 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-11-10","tur":"OTV - Petrol/Doğalgaz 16-31 Ekim 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-11-25","tur":"OTV - Petrol/Doğalgaz 1-15 Kasım 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-12-10","tur":"OTV - Petrol/Doğalgaz 16-30 Kasım 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-12-25","tur":"OTV - Petrol/Doğalgaz 1-15 Aralık 2026","kaynak":"GIB","grup":"otv"},
+{"tarih":"2026-02-10","tur":"e-Defter Berat Yükleme - Aylık GV Mükellefleri (Ekim 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-03-10","tur":"e-Defter Berat Yükleme - Aylık GV Mükellefleri (Kasım 2025)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Ocak 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Şubat 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Mart 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-15","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Ocak 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-15","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Şubat 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-06-15","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Mart 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Nisan 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Mayıs 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Haziran 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Nisan 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Mayıs 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-09-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Haziran 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Temmuz 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Ağustos 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-10","tur":"e-Defter Berat Yükleme - 3 Aylık GV (Eylül 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Temmuz 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Ağustos 2026)","kaynak":"GIB","grup":"edefter"},
+{"tarih":"2026-12-14","tur":"e-Defter Berat Yükleme - 3 Aylık KV (Eylül 2026)","kaynak":"GIB","grup":"edefter"}
 ];
 
 // SGK (2026 — tüm yıl)
@@ -535,7 +602,7 @@ function alarmToggle(){
   var btn=document.getElementById('alarmBtn');
   var lbl=document.getElementById('alarmLbl');
   if(alarmAcik){btn.classList.add('aon');lbl.textContent='Alarm ✓';bipSesi();}
-  else{btn.classList.remove('aon');lbl.textContent='Alarm';}
+  else{btn.classList.remove('aon');lbl.textContent='Alarm';bipDurdur();}
 }
 
 
@@ -611,18 +678,35 @@ function render(){
   }
 }
 
+var _alarmCtx=null, _alarmInterval=null, _alarmCalisiyor=false;
 function bipSesi(){
-  try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
-    [800,1200,1600].forEach(function(f,i){
-      var o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.frequency.value=f;
-      g.gain.setValueAtTime(0.1,ctx.currentTime+i*0.3);
-      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.3+0.25);
-      o.start(ctx.currentTime+i*0.3);o.stop(ctx.currentTime+i*0.3+0.3);
-    });
-  }catch(e){}
+  if(_alarmCalisiyor) return; // zaten çalıyor
+  _alarmCalisiyor=true;
+  function bipTek(){
+    try{
+      if(!_alarmCtx) _alarmCtx=new(window.AudioContext||window.webkitAudioContext)();
+      [800,1200,1600].forEach(function(f,i){
+        var o=_alarmCtx.createOscillator(),g=_alarmCtx.createGain();
+        o.connect(g);g.connect(_alarmCtx.destination);
+        o.frequency.value=f;
+        g.gain.setValueAtTime(0.12,_alarmCtx.currentTime+i*0.3);
+        g.gain.exponentialRampToValueAtTime(0.001,_alarmCtx.currentTime+i*0.3+0.25);
+        o.start(_alarmCtx.currentTime+i*0.3);
+        o.stop(_alarmCtx.currentTime+i*0.3+0.3);
+      });
+    }catch(e){}
+  }
+  bipTek();
+  _alarmInterval=setInterval(bipTek, 3000); // her 3 saniyede bir
+  // Alarm butonuna "Durdur" animasyonu ekle
+  var btn=document.getElementById('alarmBtn');
+  if(btn) btn.style.outline='2px solid #ff6b00';
+}
+function bipDurdur(){
+  _alarmCalisiyor=false;
+  if(_alarmInterval){clearInterval(_alarmInterval);_alarmInterval=null;}
+  var btn=document.getElementById('alarmBtn');
+  if(btn) btn.style.outline='none';
 }
 
 // FİLTRE PANELİ
@@ -787,6 +871,59 @@ window.addEventListener('beforeinstallprompt',function(e){
     setTimeout(function(){document.getElementById('pwaEl').classList.add('show');},2500);}
   catch(e){}
 });
+
+function anaEkranaEkle(){
+  // Android / Chrome — sistem prompt
+  if(pwaDeferred){
+    pwaDeferred.prompt();
+    pwaDeferred.userChoice.then(function(r){
+      pwaDeferred=null;
+    });
+    return;
+  }
+  // iOS Safari rehberi
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);display:flex;align-items:flex-end;';
+  var mesaj = '';
+  if(isIOS){
+    mesaj = '<div style="font-size:28px;margin-bottom:10px">📲</div>' +
+      '<div style="font-size:14px;font-weight:700;color:#f49e0b;margin-bottom:10px">Ana Ekrana Ekle (iPhone/iPad)</div>' +
+      '<div style="font-size:12px;color:#e8f0fe;line-height:1.8;margin-bottom:16px">' +
+      '1️⃣ &nbsp;Bu sayfayı <strong>Safari</strong> ile açın<br>' +
+      '2️⃣ &nbsp;Alttaki <strong>Paylaş</strong> butonuna basın (□↑)<br>' +
+      '3️⃣ &nbsp;<strong>"Ana Ekrana Ekle"</strong> seçeneğini seçin<br>' +
+      '4️⃣ &nbsp;<strong>"Ekle"</strong> butonuna basın<br>' +
+      '<span style="font-size:10px;color:#4a7099;margin-top:8px;display:block">Beavi ana ekranınızda uygulama gibi çalışır.</span>' +
+      '</div>';
+  } else if(isAndroid){
+    mesaj = '<div style="font-size:28px;margin-bottom:10px">📲</div>' +
+      '<div style="font-size:14px;font-weight:700;color:#f49e0b;margin-bottom:10px">Ana Ekrana Ekle (Android)</div>' +
+      '<div style="font-size:12px;color:#e8f0fe;line-height:1.8;margin-bottom:16px">' +
+      '1️⃣ &nbsp;<strong>Chrome</strong> ile açın<br>' +
+      '2️⃣ &nbsp;Sağ üst köşedeki <strong>⋮ Menü</strong> butonuna basın<br>' +
+      '3️⃣ &nbsp;<strong>"Ana ekrana ekle"</strong> seçin<br>' +
+      '4️⃣ &nbsp;<strong>"Ekle"</strong> butonuna basın<br>' +
+      '<span style="font-size:10px;color:#4a7099;margin-top:8px;display:block">Beavi ana ekranınızda uygulama gibi çalışır.</span>' +
+      '</div>';
+  } else {
+    mesaj = '<div style="font-size:28px;margin-bottom:10px">📲</div>' +
+      '<div style="font-size:14px;font-weight:700;color:#f49e0b;margin-bottom:10px">Ana Ekrana Ekle</div>' +
+      '<div style="font-size:12px;color:#e8f0fe;line-height:1.8;margin-bottom:16px">' +
+      '📱 <strong>iPhone:</strong> Safari → Paylaş (□↑) → Ana Ekrana Ekle<br>' +
+      '📱 <strong>Android:</strong> Chrome → Menü (⋮) → Ana Ekrana Ekle<br>' +
+      '<span style="font-size:10px;color:#4a7099;margin-top:8px;display:block">Beavi ana ekranınızda uygulama gibi çalışır.</span>' +
+      '</div>';
+  }
+  overlay.innerHTML = '<div style="background:#0f2133;border-top:1px solid #1e3a5f;border-radius:20px 20px 0 0;padding:20px;width:100%;text-align:center;">' +
+    mesaj +
+    '<button onclick="this.closest(\'div[style]\').remove()" style="background:#f49e0b;color:#000;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer">Tamam</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.onclick = function(e){ if(e.target===overlay) overlay.remove(); };
+}
+
 function pwaKur(){
   document.getElementById('pwaEl').classList.remove('show');
   if(pwaDeferred){pwaDeferred.prompt();pwaDeferred=null;}
