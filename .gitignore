@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+beavi_lisans.json
+AKTIVASYON_KODU.txt
+*.bak
+takvim_ayarlar.json
+takvim.json
+beavi_anahtar_uret.py
+takvim_cache.json
+takvim_degisiklik.json
